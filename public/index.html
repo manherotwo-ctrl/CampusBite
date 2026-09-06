@@ -1,0 +1,1797 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#245640">
+<meta name="description" content="CampusBite — Smart Campus Canteen">
+<title>CampusBite | Smart Campus Canteen</title>
+<style>
+:root{
+ --ink:#172019;--muted:#747a72;--paper:#f4f0e5;--panel:#fffdf8;--green:#245640;
+ --green2:#376d53;--gold:#d5a63b;--red:#a34d38;--line:#ddd6c7;--soft:#e8e3d6;
+ --shadow:0 12px 32px rgba(34,39,29,.08)
+}
+*{box-sizing:border-box}html,body{margin:0;background:#dcd9cf;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}
+.app{max-width:1200px;margin:auto;min-height:100vh;background:var(--paper)}
+.header{height:74px;background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:20}
+.brand{display:flex;gap:11px;align-items:center}.logoMark{width:40px;height:40px;border-radius:12px;background:var(--green);color:#fff;display:grid;place-items:center;font-size:21px}
+.logo{font-size:22px;font-weight:950;letter-spacing:-.8px}.logo span{color:var(--green2)}.tag{font-size:9px;color:var(--muted);letter-spacing:1.7px;margin-top:-2px}
+.headActions{display:flex;gap:8px;align-items:center}.headBtn{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:9px 12px}.avatar{width:38px;height:38px;border-radius:50%;background:#e8e3d5;color:var(--green);display:grid;place-items:center;font-weight:900}
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 74px)}.side{background:#eeeadf;border-right:1px solid var(--line);padding:18px 12px}
+.nav{width:100%;border:0;background:transparent;text-align:left;padding:11px 13px;border-radius:10px;color:#697066;font-weight:750;margin:3px 0}.nav.active,.nav:hover{background:#dfe9e1;color:var(--green)}.nav span{margin-right:9px}
+.sideNote{margin-top:28px;border-top:1px solid var(--line);padding:15px 10px;color:var(--muted);font-size:11px;line-height:1.55}
+.content{padding:28px;max-width:1020px;width:100%;margin:auto}.view{display:none}.view.active{display:block}
+.hero{background:var(--green);color:#fff;border-radius:22px;padding:24px;display:flex;justify-content:space-between;gap:20px;box-shadow:var(--shadow)}
+.hero h1{margin:0 0 5px;font-size:28px;letter-spacing:-.7px}.hero p{margin:0;color:#dbe7df}.heroStats{display:flex;gap:9px}
+.heroStat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:11px 14px;border-radius:12px;min-width:110px}.heroStat b{display:block;font-size:20px;margin-top:2px}
+.section{display:flex;align-items:center;justify-content:space-between;margin:24px 0 11px}.section h2{font-size:18px;margin:0}.muted{color:var(--muted);font-size:12px}
+.offer{background:#25241e;color:#fff;border-radius:17px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:15px}.offer b{font-size:16px}.offer small{display:block;color:#c7c7bd;margin-top:4px}
+.coupon{background:var(--gold);color:#211f17;border:0;border-radius:9px;padding:9px 11px;font-weight:950}
+.menuGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.food{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:13px}
+.foodPic{height:175px;width:100%;border-radius:13px;background:#ebe5d7;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;border:1px solid #e1dacb}.foodPic img{display:block;width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;object-position:center;margin:auto;padding:4px}.foodPic:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.035));pointer-events:none}.photoFallback{opacity:0;position:absolute;z-index:2}.food h3{margin:10px 0 3px;font-size:15px}
+.foodFoot{display:flex;align-items:center;justify-content:space-between;margin-top:12px}.price{font-size:17px;font-weight:950}.add{border:0;background:var(--green);color:#fff;border-radius:9px;padding:9px 12px;font-weight:850}
+.qty{display:flex;align-items:center;gap:7px}.qty button{width:29px;height:29px;border:1px solid var(--line);background:#eee9dc;border-radius:8px;font-weight:900;color:var(--green)}
+.searchbar{display:flex;gap:9px}.searchbar input,.searchbar select,.field input,.field select{width:100%;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:11px 12px;outline:none}
+.chips{display:flex;gap:7px;overflow:auto;margin:12px 0}.chip{white-space:nowrap;border:1px solid var(--line);background:var(--panel);padding:8px 12px;border-radius:999px}.chip.active{background:var(--green);border-color:var(--green);color:#fff}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:17px;box-shadow:0 5px 18px rgba(30,34,24,.04)}
+.cartLayout{display:grid;grid-template-columns:1fr 330px;gap:14px}.cartItem{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.cartItem:last-child{border-bottom:0}
+.mini{height:54px;width:54px;background:#ebe5d7;border-radius:11px;display:grid;place-items:center;font-size:27px}.grow{flex:1}
+.row{display:flex;justify-content:space-between;gap:15px;padding:8px 0}.total{border-top:1px solid var(--line);margin-top:7px;padding-top:13px;font-size:19px;font-weight:950}
+.primary{width:100%;border:0;background:var(--green);color:#fff;border-radius:11px;padding:13px;font-weight:900}.secondary{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:9px 12px;font-weight:750}
+.empty{text-align:center;padding:45px 10px;color:var(--muted)}
+.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:#e4efe7;color:var(--green);font-size:10px;font-weight:950}.order{margin-bottom:12px}.orderTop{display:flex;justify-content:space-between}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:18px 0 5px}.step{font-size:10px;text-align:center;color:#999e96}.step.done{color:var(--green);font-weight:850}.stepDot{width:20px;height:20px;border-radius:50%;background:#e6e4dc;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;line-height:1;color:#fff}.done .stepDot{background:var(--green)}
+.token{background:#eee8da;border:2px dashed var(--green);border-radius:13px;text-align:center;padding:13px;margin-top:12px}.token strong{display:block;color:var(--green);font-size:38px;letter-spacing:3px}
+.dashboard{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.metric{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:15px}.metric b{display:block;font-size:23px;margin-top:5px}
+.walletHero{background:linear-gradient(135deg,#1f4b38,#376d53);color:#fff;border-radius:21px;padding:22px;box-shadow:var(--shadow);position:relative;overflow:hidden}.walletHero:after{content:"CAMPUS WALLET";position:absolute;left:50%;right:auto;bottom:7px;transform:translateX(-50%);font-size:27px;font-weight:950;letter-spacing:2px;opacity:.08;white-space:nowrap;pointer-events:none}
+.walletTop{display:flex;justify-content:space-between;align-items:center}.walletLabel{font-size:11px;opacity:.75;letter-spacing:1px}.walletBalance{font-size:38px;font-weight:950;margin:5px 0 15px}.walletId{font-size:11px;opacity:.7}.walletActions{display:flex;gap:8px;margin-top:17px}.walletActions button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:9px;padding:9px 12px}
+.walletGrid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:13px}.transaction{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--line)}.transaction:last-child{border-bottom:0}.txIcon{width:38px;height:38px;border-radius:10px;background:#ebe5d7;display:grid;place-items:center}.credit{color:var(--green)}.debit{color:var(--red)}
+.staffQueue{display:grid;gap:9px}.q{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:12px}.adminBtns{display:flex;gap:7px;flex-wrap:wrap}.adminBtns button{border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:8px 10px;font-size:11px;font-weight:800}
+.foodSmart{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.smartTag{font-size:9px;font-weight:850;border-radius:999px;padding:5px 7px;background:#edf2eb;color:#3f654d;border:1px solid #dce6dc}
+smartTag.low{background:#fff2dd;color:#8a5d17;border-color:#f0dfbd}.smartTag.hot{background:#f8e9df;color:#8a4935;border-color:#ead3c7}.wasteGrid{display:grid;grid-template-columns:1.25fr .75fr;gap:13px}.wasteHero{background:linear-gradient(135deg,#245640,#376d53);color:#fff;border-radius:17px;padding:18px}.wasteHero .big{font-size:30px;font-weight:950;margin:5px 0}.wasteMeter{height:8px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden;margin:12px 0}.wasteMeter span{display:block;height:100%;background:#d5a63b;border-radius:99px}.wasteRow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.wasteRow:last-child{border-bottom:0}.saving{color:var(--green);font-weight:900}
+
+.modal{position:fixed;inset:0;background:rgba(18,23,18,.48);display:none;align-items:center;justify-content:center;padding:16px;z-index:100}.modal.open{display:flex}.modalBox{background:var(--panel);border-radius:20px;padding:21px;width:min(510px,100%);max-height:90vh;overflow:auto}.modalHead{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#eeeae0;border-radius:9px;padding:7px 10px}
+.field{margin:13px 0}.field label{display:block;font-size:11px;font-weight:850;color:#666c64;margin-bottom:6px}.discount{color:var(--green);font-weight:900}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);background:#1c201b;color:#fff;border-radius:11px;padding:11px 15px;opacity:0;transition:.25s;z-index:200;font-size:12px;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
+.mobileNav{display:none}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.side{display:none}.content{padding:18px 14px 82px}.menuGrid{grid-template-columns:repeat(2,1fr)}.cartLayout,.walletGrid{grid-template-columns:1fr}.hero{display:block}.heroStats{margin-top:15px}.dashboard{grid-template-columns:repeat(2,1fr)}.mobileNav{position:fixed;display:flex;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);z-index:40;justify-content:space-around;padding:7px}.mobileNav button{border:0;background:transparent;color:#697066;font-size:10px}.mobileNav button.active{color:var(--green);font-weight:900}.mobileNav span{display:block;font-size:18px}}
+@media(max-width:480px){.foodPic{height:205px}.menuGrid{grid-template-columns:1fr}.searchbar{display:block}.heroStats{display:grid;grid-template-columns:repeat(3,1fr)}.heroStat{min-width:0}.hero h1{font-size:23px}}
+<style>.statusSteps{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.statusStep{font-size:10px!important;padding:6px 8px!important}.statusStep.current{opacity:1;font-weight:700}.statusStep:disabled{opacity:.45;cursor:not-allowed}</style><style>.ratingBox{margin-top:12px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fffdf8}.ratingLabel{font-size:11px;font-weight:700;color:var(--text)}.ratingStars{display:flex;gap:4px;margin-top:6px}.ratingStar{border:0;background:transparent!important;padding:2px!important;font-size:22px!important;line-height:1;cursor:pointer;color:#c8c1b5}.ratingStar.active{color:#f5b63d}.ratingStar:hover{transform:scale(1.08)}.ratingSaved{font-size:11px;color:var(--green);font-weight:700;margin-top:5px}</style>
+<!-- CampusBite food-frame v4: adaptive whole-image presentation -->
+
+<style id="role-gate-css">
+.role-gate{position:fixed;inset:0;z-index:9999;background:rgba(10,13,12,.72);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;padding:18px}
+.role-gate.hidden{display:none}.role-card{width:min(620px,100%);background:var(--panel,#fff);border:1px solid var(--line,#e5e7eb);border-radius:26px;padding:28px;box-shadow:0 30px 100px rgba(0,0,0,.22)}
+.role-brand{display:flex;align-items:center;gap:11px;margin-bottom:22px}.role-brand-mark{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,#ff8a3d,#f3c969);font-size:22px}
+.role-brand strong{font-size:20px}.role-brand small{display:block;color:#7a807d;font-size:10px;letter-spacing:.12em;margin-top:2px}
+.role-card h2{font-size:28px;margin:4px 0 8px;letter-spacing:-.7px}.role-card>p{color:#777d79;margin:0 0 22px;line-height:1.55}
+.role-options{display:grid;grid-template-columns:1fr 1fr;gap:12px}.role-option{border:1px solid var(--line,#e5e7eb);background:transparent;border-radius:18px;padding:18px;text-align:left;transition:.2s}.role-option:hover{transform:translateY(-2px);border-color:#f0a66c;box-shadow:0 12px 30px rgba(20,30,25,.08)}.role-icon{font-size:25px;margin-bottom:13px}.role-option b{display:block;font-size:15px;margin-bottom:5px}.role-option span{font-size:12px;color:#7b817e;line-height:1.45}
+.role-form{display:none}.role-form.active{display:block}.back-role{border:0;background:transparent;color:#777d79;padding:0;margin-bottom:18px}.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.role-field label{display:block;font-size:10px;font-weight:700;letter-spacing:.08em;color:#7b817e;margin:0 0 6px}.role-field input,.role-field select{width:100%;padding:11px 12px;border:1px solid var(--line,#e5e7eb);border-radius:11px;background:transparent;color:inherit;outline:none}.role-field select{appearance:none !important;-webkit-appearance:none !important;-moz-appearance:none !important;background-image:none !important;background-color:transparent !important}.role-field select::-ms-expand{display:none !important}.role-actions{display:flex;justify-content:flex-end;margin-top:18px}.role-primary{padding:14px 22px;font-size:15px;border:0;border-radius:11px;padding:11px 17px;background:#f28b3d;color:#fff;font-weight:700}.role-error{color:#d74f45;font-size:12px;margin-top:9px;display:none}
+.role-badge{font-size:10px;padding:5px 8px;border-radius:999px;background:#eef7f2;color:#2f7354;margin-left:6px}
+@media(max-width:600px){.role-options,.role-grid{grid-template-columns:1fr}.role-card{padding:22px}.role-card h2{font-size:24px}}
+</style>
+
+
+
+
+
+<style id="real-profile-banner-css">
+.real-profile-banner{
+  margin:0 0 14px;
+  min-height:158px;
+  position:relative;
+  overflow:hidden;
+  border-radius:22px;
+  padding:25px 30px;
+  display:flex;
+  align-items:center;
+  background:
+    radial-gradient(circle at 92% 18%,rgba(255,255,255,.22) 0 45px,transparent 46px),
+    radial-gradient(circle at 82% 120%,rgba(255,255,255,.10) 0 120px,transparent 121px),
+    linear-gradient(115deg,#174d3c 0%,#21634d 55%,#b76d3d 145%);
+  box-shadow:0 12px 30px rgba(26,72,55,.14);
+}
+.real-profile-banner:before{
+  content:"";
+  position:absolute;
+  right:-32px;
+  bottom:-92px;
+  width:235px;
+  height:235px;
+  border-radius:50%;
+  border:30px solid rgba(255,255,255,.07);
+}
+.real-profile-banner:after{
+  content:"🥗";
+  position:absolute;
+  right:62px;
+  top:25px;
+  font-size:70px;
+  transform:rotate(-8deg);
+  filter:drop-shadow(0 8px 9px rgba(0,0,0,.12));
+}
+.real-profile-banner-content{position:relative;z-index:2;max-width:690px}
+.real-profile-kicker{
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.78);
+  margin-bottom:7px;
+}
+.real-profile-banner h3{
+  margin:0 0 6px;
+  color:#fff;
+  font-size:25px;
+  letter-spacing:-.55px;
+  line-height:1.12;
+}
+.real-profile-banner p{
+  margin:0;
+  color:rgba(255,255,255,.80);
+  font-size:11.5px;
+  line-height:1.5;
+  max-width:610px;
+}
+.real-profile-pills{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
+.real-profile-pill{
+  padding:6px 9px;
+  border-radius:999px;
+  color:#fff;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.17);
+  font-size:9.5px;
+  font-weight:700;
+  backdrop-filter:blur(6px);
+}
+@media(max-width:700px){
+  .real-profile-banner{padding:22px;min-height:175px}
+  .real-profile-banner:after{right:22px;top:19px;font-size:50px;opacity:.5}
+  .real-profile-banner h3{font-size:22px;max-width:76%}
+  .real-profile-banner p{max-width:94%}
+}
+</style>
+
+
+
+<style id="single-logout-css">
+.single-logout{padding:10px 16px;font-size:14px;
+  border:1px solid #e1e3e1;background:#fff;color:#626965;
+  border-radius:9px;padding:7px 10px;font-size:11px;font-weight:700;
+  cursor:pointer;margin-left:8px;
+}
+.single-logout:hover{background:#f7f8f7;border-color:#cfd4d0;color:#303633}
+</style>
+
+<style id="header-cleanup-css">
+/* Keep demo/reset/cart controls grouped on the right and move the
+   customer initials avatar beside Logout. */
+header{
+  display:flex !important;
+  align-items:center !important;
+}
+header .header-actions,
+header .actions,
+header .top-actions{
+  margin-left:auto !important;
+}
+.single-logout{padding:10px 16px;font-size:14px;
+  order:99 !important;
+}
+#headerAvatar{
+  order:98 !important;
+  margin-left:8px !important;
+  margin-right:0 !important;
+}
+.header-right-group{
+  margin-left:auto !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+}
+</style>
+
+<style id="header-items-right-only-css">
+/* Shift only the cart and wallet amount to the right. Do not alter their
+   appearance or create any additional controls. */
+header .cart,
+header .wallet,
+header [class*="cart"],
+header [class*="wallet"],
+header [id*="cart"],
+header [id*="wallet"]{
+  margin-left:auto !important;
+}
+</style>
+
+<style id="clean-role-ui">
+/* Staff accounts get a true operations-only shell. Customer navigation,
+   wallet/cart controls and mobile customer navigation are not shown. */
+body.staff-mode .side,
+body.staff-mode .mobileNav,
+body.staff-mode #walletHead,
+body.staff-mode #cartHead,
+body.staff-mode #customerGreeting,
+body.staff-mode .customer-only,
+body.staff-mode #profile {
+  display:none !important;
+}
+body.staff-mode .layout{grid-template-columns:1fr !important}
+body.staff-mode .content{max-width:1120px}
+body.staff-mode #home,
+body.staff-mode #menu,
+body.staff-mode #cart,
+body.staff-mode #orders,
+body.staff-mode #wallet,
+body.staff-mode #profile{display:none !important}
+body.staff-mode #staff{display:block !important}
+body.staff-mode .headActions{margin-left:auto}
+.staff-only-label{
+  display:none;
+  padding:6px 9px;
+  border-radius:999px;
+  background:#eef7f2;
+  color:#2f7354;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.04em;
+}
+body.staff-mode .staff-only-label{display:inline-flex;align-items:center}
+</style>
+<style id="customer-home-hero-redesign">
+.customer-home-hero{position:relative;overflow:hidden;min-height:245px;display:grid;grid-template-columns:1.1fr .9fr;gap:22px;padding:27px;border-radius:24px;color:#fff;background:radial-gradient(circle at 88% 10%,rgba(255,255,255,.10) 0 70px,transparent 71px),radial-gradient(circle at 100% 100%,rgba(213,166,59,.15) 0 145px,transparent 146px),linear-gradient(125deg,#1c513e 0%,#245f48 55%,#193e31 100%);box-shadow:0 16px 38px rgba(36,86,64,.16)}
+.customer-home-hero:before{content:"";position:absolute;width:250px;height:250px;right:-105px;bottom:-155px;border:38px solid rgba(255,255,255,.045);border-radius:50%}
+.customer-hero-copy{position:relative;z-index:2;align-self:center}.customer-hero-kicker{font-size:9px;letter-spacing:.15em;font-weight:850;color:rgba(255,255,255,.64);margin-bottom:10px}
+.customer-hero-copy h1{margin:0 0 10px;font-size:38px;line-height:1.08;letter-spacing:-.8px}.customer-hero-copy p{margin:0;max-width:450px;color:rgba(255,255,255,.76);font-size:12px;line-height:1.6}
+.customer-hero-btn{margin-top:21px;border:0;border-radius:11px;padding:13px 18px;background:#fff;color:#245640;font-weight:850;font-size:13px;box-shadow:0 7px 20px rgba(0,0,0,.09)}.customer-hero-btn span{margin-left:5px;font-size:14px}
+.customer-live-panel{position:relative;z-index:2;align-self:stretch;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.075);border-radius:17px;padding:15px;backdrop-filter:blur(8px)}
+.customer-live-title{display:flex;align-items:center;gap:7px;font-size:9px;letter-spacing:.1em;font-weight:850;color:rgba(255,255,255,.70);margin-bottom:12px}.live-dot{width:7px;height:7px;border-radius:50%;background:#d5a63b;box-shadow:0 0 0 4px rgba(213,166,59,.12)}
+.customer-status-grid{display:grid;gap:8px}.customer-status{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:10px;padding:10px 11px;border-radius:11px;background:rgba(255,255,255,.075)}
+.customer-status small{color:rgba(255,255,255,.64);font-size:9px;grid-column:1}.customer-status strong{color:#fff;font-size:16px;grid-column:2;grid-row:1/3;text-align:right}.customer-status span{color:rgba(255,255,255,.46);font-size:8.5px;grid-column:1;margin-top:2px}
+@media(max-width:850px){.customer-home-hero{grid-template-columns:1fr;min-height:0}.customer-live-panel{margin-top:2px}}@media(max-width:480px){.customer-home-hero{padding:21px;border-radius:20px}.customer-hero-copy h1{font-size:30px}}
+</style>
+<style id="block4-counter-selector">
+.counter-status{position:relative}
+.counter-select-wrap{grid-column:2;grid-row:1/3}
+.counter-select{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  -moz-appearance:none !important;
+  background-image:none !important;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:9px;
+  padding:8px 27px 8px 10px;
+  color:#fff;
+  background:rgba(255,255,255,.10);
+  font-size:12px;
+  font-weight:850;
+  outline:none;
+  cursor:pointer;
+}
+.counter-select option{color:#24302a;background:#fff}.counter-select::-ms-expand{display:none}.counter-select-wrap{display:flex;align-items:flex-start;width:100%;height:48px;max-height:48px;overflow:hidden}.counter-select{display:block;width:100%;height:48px;min-height:48px;max-height:48px;line-height:normal !important;box-sizing:border-box;vertical-align:middle}
+.counter-status span{grid-column:1}
+</style>
+<style id="staff-shop-ui">
+.staff-console-shop{display:inline-flex;align-items:center;gap:5px;margin-left:8px;padding:6px 9px;border-radius:999px;background:#f5eee2;color:#6f5730;font-size:10px;font-weight:900}
+.staff-rating-card{margin:12px 0 18px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--panel);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.staff-rating-label{font-size:12px;font-weight:800;color:var(--text)}
+.staff-rating-value{display:flex;align-items:center;gap:9px;white-space:nowrap}
+.staff-rating-stars{display:flex;gap:2px;line-height:1}
+.staff-rating-star{position:relative;display:inline-block;font-size:24px;color:#d7d1c7;line-height:1}
+.staff-rating-star::after{content:'★';position:absolute;left:0;top:0;width:var(--fill,0%);overflow:hidden;color:#f5b63d;white-space:nowrap}
+.staff-rating-number{font-size:13px;font-weight:900;color:var(--text)}
+@media(max-width:600px){.staff-rating-card{align-items:flex-start;flex-direction:column;gap:8px}.staff-rating-value{width:100%;justify-content:space-between}}
+</style>
+<style id="staff-pickup-time-ui">.staff-pickup-time{margin-top:6px;font-weight:700}.staff-pickup-time b{color:var(--green)}</style>
+<style id="live-availability-ui">
+.staff-menu-row{align-items:center}
+.availability-toggle{
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:7px 10px;
+  font-size:10px;
+  font-weight:900;
+  cursor:pointer;
+}
+.availability-toggle.is-available{
+  background:#e4efe7;
+  color:var(--green);
+  border-color:#cfe0d4;
+}
+.availability-toggle.is-unavailable{
+  background:#f7e5df;
+  color:var(--red);
+  border-color:#ead0c8;
+}
+</style>
+<style id="intelligent-waste-ui">
+.wasteRow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.wasteRow:last-child{border-bottom:0}
+.wasteRow .wasteName{font-weight:800}
+.wasteRow .wasteMeta{font-size:9px;color:var(--muted);margin-top:2px}
+.wasteAction{font-size:10px;font-weight:950;white-space:nowrap}
+.wasteAction.reduce{color:#a34d38}
+.wasteAction.hold{color:#8b6a2c}
+.wasteAction.increase{color:#245640}
+.wasteAction.stable{color:#747a72}
+.wasteBasisCard{margin-top:12px;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#fbfaf5;display:flex;gap:8px;flex-wrap:wrap;font-size:10px;line-height:1.5}
+.wasteBasisCard span{color:var(--muted)}
+</style>
+<style id="waste-intelligence-v2-ui">
+.wasteDashboard{display:flex;flex-direction:column;gap:12px}
+.wasteTopGrid{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:10px}
+.wasteScoreCard,.wasteStatCard,.wasteActionCard,.wasteExplain{border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.wasteScoreCard{padding:16px;background:linear-gradient(145deg,#245640,#376d53);color:#fff}
+.wasteScore{font-size:38px;font-weight:950;line-height:1;margin:10px 0 3px}
+.wasteRiskLabel{font-size:13px;font-weight:900}
+.wasteScoreCard small{display:block;margin-top:8px;color:rgba(255,255,255,.78);line-height:1.35}
+.wasteStatCard{padding:15px;display:flex;flex-direction:column;justify-content:center}
+.wasteStatCard span{font-size:10px;color:var(--muted);font-weight:800}
+.wasteStatCard b{font-size:25px;margin:5px 0}
+.wasteStatCard small{font-size:9px;color:var(--muted)}
+.wasteActionCard{padding:15px}
+.wasteActionHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.wasteActionHead small{display:block;color:var(--muted);font-size:9px;margin-top:3px}
+.wasteItem{display:grid;grid-template-columns:minmax(150px,1fr) 70px 70px 110px;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.wasteItem:last-child{border-bottom:0}
+.wasteItemName{font-weight:900;font-size:11px}
+.wasteItemReason{font-size:8.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+.wasteItemStat{text-align:center}
+.wasteItemStat b{display:block;font-size:13px}
+.wasteItemStat span{font-size:8px;color:var(--muted)}
+.wasteDecision{text-align:right;font-size:10px;font-weight:950}
+.wasteDecision.reduce{color:var(--red)}
+.wasteDecision.increase{color:var(--green)}
+.wasteDecision.hold{color:#8b6a2c}
+.wasteDecision.keep{color:var(--muted)}
+.wasteExplain{padding:12px 15px;display:flex;gap:8px;flex-wrap:wrap;font-size:9px;line-height:1.5}
+.wasteExplain span{color:var(--muted)}
+@media(max-width:850px){.wasteTopGrid{grid-template-columns:1fr 1fr}.wasteScoreCard{grid-column:1/-1}}
+@media(max-width:560px){.wasteTopGrid{grid-template-columns:1fr}.wasteScoreCard{grid-column:auto}.wasteItem{grid-template-columns:1fr 55px 55px}.wasteDecision{grid-column:1/-1;text-align:left}}
+</style>
+<style id="wastesense-ui">
+.wasteSense{display:flex;flex-direction:column;gap:12px}
+.wsHero{background:linear-gradient(135deg,#245640,#376d53);color:#fff;border-radius:18px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.wsHero h3{margin:9px 0 4px;font-size:22px}
+.wsHero p{margin:0;color:rgba(255,255,255,.75);font-size:10px}
+.wsHeroNumber{text-align:right;min-width:130px}
+.wsHeroNumber b{display:block;font-size:38px;line-height:1}
+.wsHeroNumber span{font-size:9px;color:rgba(255,255,255,.75)}
+.wsStats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.wsStats>div{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:13px}
+.wsStats span{display:block;color:var(--muted);font-size:9px;font-weight:800}
+.wsStats b{display:block;font-size:22px;margin:5px 0 1px}
+.wsStats small{font-size:8px;color:var(--muted)}
+.wsPanel{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:15px}
+.wsPanelHead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.wsPanelHead small{display:block;color:var(--muted);font-size:8.5px;margin-top:3px}
+.wsTableHead,.wsRow{display:grid;grid-template-columns:2.2fr .7fr .8fr .7fr .9fr 1fr;gap:8px;align-items:center}
+.wsTableHead{font-size:7.5px;color:var(--muted);font-weight:950;padding:7px 8px;border-bottom:1px solid var(--line)}
+.wsRow{padding:11px 8px;border-bottom:1px solid var(--line)}
+.wsRow:last-child{border-bottom:0}
+.wsFood{font-size:10px;font-weight:900}
+.wsFood small{display:block;color:var(--muted);font-size:7.8px;font-weight:600;margin-top:3px}
+.wsCell{text-align:center;font-size:10px;font-weight:850}
+.wsDecision{font-size:9px;font-weight:950;text-align:right}
+.wsDecision.reduce{color:var(--red)}
+.wsDecision.increase{color:var(--green)}
+.wsDecision.keep{color:var(--muted)}
+.wsDecision.hold{color:#8b6a2c}
+.wsReason{font-size:7.5px;color:var(--muted);font-weight:600}
+.wsInsight{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid var(--line);font-size:9px;line-height:1.4}
+.wsInsight:last-child{border-bottom:0}
+.wsInsightIcon{font-size:15px}
+@media(max-width:850px){.wsStats{grid-template-columns:1fr 1fr}.wsTableHead{display:none}.wsRow{grid-template-columns:1fr 1fr 1fr}.wsFood{grid-column:1/-1}.wsDecision{grid-column:1/-1;text-align:left}}
+@media(max-width:560px){.wsHero{align-items:flex-start;flex-direction:column}.wsHeroNumber{text-align:left}.wsStats{grid-template-columns:1fr}}
+</style>
+<style id="simple-waste-helper-ui">
+.simpleWasteCard{border:1px solid var(--line);border-radius:17px;background:var(--panel);padding:16px}.staff-waste-spacing{margin-top:28px}
+.simpleWasteHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
+.simpleWasteTitle{display:flex;align-items:center;gap:9px;font-weight:950;font-size:15px}
+.simpleWasteLive{font-size:8px;font-weight:950;letter-spacing:.08em;padding:5px 8px;border-radius:999px;background:#e8f3ec;color:var(--green)}
+.simpleWasteShop{font-size:9px;color:var(--muted);margin-top:3px}
+.simpleWasteItem{display:grid;grid-template-columns:42px minmax(0,1fr) 112px;gap:11px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.simpleWasteItem:last-child{border-bottom:0}
+.simpleWasteEmoji{width:42px;height:42px;border-radius:12px;background:#f5f1e7;display:grid;place-items:center;font-size:22px}
+.simpleWasteFoodInfo{min-width:0}
+.simpleWasteFoodInfo b{font-size:11px}
+.simpleWasteMetrics{display:flex;gap:12px;margin-top:5px;font-size:8.5px;color:var(--muted)}
+.simpleWasteMetrics strong{color:var(--text);font-size:10px}
+.simpleWastePrepare{text-align:right;border-radius:12px;padding:9px 8px;background:#e8f3ec;color:var(--green)}
+.simpleWastePrepare span{display:block;font-size:7.5px;font-weight:850;text-transform:uppercase;letter-spacing:.06em}
+.simpleWastePrepare strong{display:block;font-size:19px;line-height:1.1;margin-top:3px}
+.simpleWasteRecommendation{font-size:8px;color:var(--muted);margin-top:3px}
+.simpleWasteRecommendation strong{color:var(--text)}
+@media(max-width:560px){.simpleWasteItem{grid-template-columns:38px minmax(0,1fr)}.simpleWasteEmoji{width:38px;height:38px}.simpleWastePrepare{grid-column:2;text-align:left;display:inline-block;width:max-content}.simpleWasteMetrics{gap:8px;flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div class="role-gate" id="roleGate">
+  <div class="role-card">
+    <div class="role-brand">
+      <div class="role-brand-mark">🥫</div>
+      <div><strong>CampusBite</strong><small>SMART CAMPUS CANTEEN</small></div>
+    </div>
+
+    <div id="roleChooser">
+      <h2>How are you using CampusBite?</h2>
+      <p>Choose your role to open the experience built for you.</p>
+      <div class="role-options">
+        <button class="role-option" id="customerRole">
+          <div class="role-icon">🎓</div>
+          <b>Customer</b>
+          <span>Browse the menu, place orders, use your wallet and track pickup.</span>
+        </button>
+        <button class="role-option" id="staffRole">
+          <div class="role-icon">👨‍🍳</div>
+          <b>Canteen Staff</b>
+          <span>Manage orders, preparation, availability and food-waste intelligence.</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="role-form" id="customerForm">
+      <button class="back-role" id="customerBackToRoles">← Back</button>
+      <div id="customerLoginPage">
+        <h2>Customer login</h2>
+        <p>Enter your CampusBite ID and password to continue.</p>
+        <div class="role-grid">
+          <div class="role-field"><label>CAMPUSBITE ID</label><input id="customerCodeInput" placeholder="Enter your CampusBite ID" autocomplete="username"></div>
+          <div class="role-field"><label>PASSWORD</label><input id="customerPassword" type="password" placeholder="Enter your password" autocomplete="current-password"></div>
+        </div>
+        <div class="role-error" id="customerError">Customer account not found or login details are incorrect.</div>
+        <div class="role-actions"><button class="role-primary" id="continueCustomer">Enter CampusBite →</button></div>
+        <div style="text-align:center;margin-top:12px;font-size:11px;color:var(--muted)">New to CampusBite? <button type="button" id="customerCreateAccount" style="border:0;background:none;color:var(--green);font-weight:900;cursor:pointer">Create an account</button></div>
+      </div>
+
+      <div id="customerRegisterPage" style="display:none">
+        <button class="back-role" id="customerBackToLogin">← Back to Login</button>
+        <h2>Create your CampusBite account</h2>
+        <p>Create your account first. After registration, return to the login page and sign in with your new credentials.</p>
+        <div class="role-grid">
+          <div class="role-field"><label>NAME</label><input id="customerName" placeholder="Your name" autocomplete="name"></div>
+          <div class="role-field"><label>CAMPUSBITE ID</label><input id="customerRegisterCodeInput" placeholder="Choose your CampusBite ID" autocomplete="username"></div>
+          <div class="role-field"><label>PASSWORD</label><input id="customerRegisterPassword" type="password" placeholder="Create your password" autocomplete="new-password"></div>
+          <div class="role-field"><label>CONFIRM PASSWORD</label><input id="customerPasswordConfirm" type="password" placeholder="Re-enter your password" autocomplete="new-password"></div>
+        </div>
+        <div class="role-error" id="customerRegisterError">Please enter your name, CampusBite ID and password.</div>
+        <div class="role-actions"><button class="role-primary" id="createCustomerAccount">Create Account →</button></div>
+      </div>
+    </div>
+
+    <div class="role-form" id="staffForm">
+      <button class="back-role" data-back>← Back</button>
+      <h2>Staff access</h2>
+      <p>Sign in to the canteen operations console.</p>
+      <div class="role-grid">
+        <div class="role-field"><label>STAFF ID</label><input id="staffCode" autocomplete="username" placeholder="e.g. HARI-STAFF"></div>
+        <div class="role-field"><label>STAFF PASSWORD</label><input id="staffPin" type="password" autocomplete="current-password" maxlength="128" placeholder="Enter your password"></div>
+      </div>
+      <div class="role-error" id="staffError">Enter your staff PIN to continue.</div>
+      <div class="role-actions"><button class="role-primary" id="continueStaff">Open Staff Console →</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="app">
+<header class="header">
+ <div class="brand"><div class="logoMark">🥫</div><div><div class="logo">Campus<span>Bite</span></div><div class="tag">SMART CAMPUS CANTEEN</div></div></div>
+ <div class="headActions"><button class="single-logout" id="logoutBtn">Log out</button><span class="staff-only-label">👨‍🍳 STAFF CONSOLE</span><button class="headBtn" id="walletHead">💳 ₹<span id="headBalance">1,250</span></button><button class="headBtn" id="cartHead">🛒 <b id="cartCount">0</b></button><div class="avatar" id="headerAvatar">ST</div></div>
+</header>
+<div class="layout">
+<aside class="side">
+ <button class="nav active" data-view="home">🏠 Home</button>
+ <button class="nav" data-view="menu">🍽️ Menu</button>
+ <button class="nav" data-view="cart">🛒 Cart</button>
+ <button class="nav" data-view="tracking">📍 Order Tracking</button>
+ <button class="nav" data-view="history">🧾 Order History</button>
+ <button class="nav" data-view="wallet">💳 Campus Wallet</button>
+ <button class="nav" data-view="profile">👤 Profile</button>
+ 
+ <div class="sideNote"><b>CampusBite</b><br>One campus. One canteen experience.<br><br><span></span></div>
+</aside>
+<main class="content">
+<section id="home" class="view active">
+ <div class="customer-home-hero">
+  <div class="customer-hero-copy">
+    <div class="customer-hero-kicker">CAMPUSBITE • CENTRAL CAMPUS CANTEEN</div>
+    <h1 id="customerGreeting">Good evening, Customer 👋</h1>
+    <p>Order ahead, avoid the rush and collect your meal when it is ready.</p>
+    <button class="customer-hero-btn" id="browseBtn">Explore today's menu <span>→</span></button>
+  </div>
+  <div class="customer-live-panel">
+    <div class="customer-live-title"><span class="live-dot"></span> LIVE CANTEEN STATUS</div>
+    <div class="customer-status-grid">
+      <div class="customer-status"><small>Current wait</small><strong id="queueWait">2 min</strong><span>Estimated queue</span></div>
+      <div class="customer-status counter-status">
+  <small>Pickup counter</small>
+  <div class="counter-select-wrap">
+    <select id="pickupCounter" class="counter-select" aria-label="Choose pickup shop" onchange="window.setCampusShopByCounter(this.value)">
+      <option value="1">Hari Sandwich</option>
+      <option value="2" selected>Reo Store</option>
+      <option value="3">Campus Café</option>
+    </select>
+  </div>
+  <span>Central Campus Canteen</span>
+</div>
+    </div>
+  </div>
+</div>
+<div class="section"><h2>Customer offer</h2><span class="muted">Applied automatically</span></div>
+ <div class="offer"><div><b>10% off your CampusBite order</b><small>Code <b>CAMPUS10</b> • minimum order ₹200</small></div><button class="coupon" id="applyOffer">Apply</button></div>
+ <div class="section"><h2>Popular Foods at the Canteen</h2><button class="secondary" data-view="menu">See all</button></div><div id="homeGrid" class="menuGrid"></div>
+</section>
+
+<section id="menu" class="view">
+ <div class="section"><div><h2>Today’s canteen menu</h2></div><span class="muted">Central Campus Canteen • Open</span></div>
+ <div class="searchbar"><input id="search" placeholder="Search the menu…"><select id="sort"><option value="popular">Popular first</option><option value="low">Lowest price</option><option value="high">Highest price</option></select></div>
+<div id="chips" class="chips"></div><div id="menuGrid" class="menuGrid"></div>
+</section>
+
+<section id="cart" class="view">
+ <div class="section"><h2>Your cart</h2><span class="muted" id="cartMeta"></span></div>
+ <div class="cartLayout"><div class="card" id="cartItems"></div><div class="card" id="summary"></div></div>
+</section>
+
+<section id="tracking" class="view">
+ <div class="section"><div><h2>Order Tracking</h2><span class="muted">Live status of your active orders</span></div><span class="muted">Received → Preparing → Ready</span></div>
+ <div id="trackingList"></div>
+</section>
+
+<section id="history" class="view">
+ <div class="section"><div><h2>Order History</h2><span class="muted">Completed orders from Central Campus Canteen</span></div><span class="muted">Your saved orders</span></div>
+ <div id="historyList"></div>
+</section>
+
+<section id="wallet" class="view">
+ <div class="section"><h2>Campus Wallet</h2><span class="muted">Fast, cashless campus payments</span></div>
+ <div class="walletHero">
+   <div class="walletTop"><span class="walletLabel">AVAILABLE BALANCE</span><span>● ACTIVE</span></div>
+   <div class="walletBalance">₹<span id="walletBalance">1,250</span></div>
+   <div class="walletId" id="walletIdDisplay">Campus Wallet •</div>
+   <div class="walletActions"><button id="addMoney">＋ Add money</button><button id="walletHistory">Transaction history</button></div>
+ </div>
+ <div class="card splitRequestCard"><div class="section" style="margin:0 0 4px"><h3>Split bill requests</h3><span class="muted">Approve payments only when you recognize them</span></div><div id="splitRequestsList"></div></div>
+ <div class="section"><h2>Wallet overview</h2></div>
+ <div class="dashboard"><div class="metric">Total expenditure<b id="walletSpent">₹0</b><span class="muted">spent all time</span></div><div class="metric">Cashback<b id="walletCashback">₹75</b><span class="muted">earned</span></div><div class="metric">Rewards<b id="walletPoints">0</b><span class="muted">points</span></div><div class="metric"><span>Auto-pay</span><b id="autoPayStatus">—</b><span class="muted" id="autoPayText">Loading account settings…</span><button class="secondary" id="autoPayBtn" style="margin-top:9px;width:100%;font-size:10px">Enable auto-pay</button></div></div>
+ <div class="walletGrid">
+   <div class="card"><h3>Recent transactions</h3><div id="transactions"></div></div>
+   <div class="card"><h3>Wallet benefits</h3><div class="row"><span>⚡ Faster checkout</span><b>✓</b></div><div class="row"><span>🎁 Campus cashback</span><b>✓</b></div><div class="row"><span>🔐 PIN-protected</span><b>✓</b></div><div class="row"><span>🧾 Digital receipts</span><b>✓</b></div></div>
+ </div>
+</section>
+
+<section id="profile" class="view">
+ <div class="section"><h2>Customer profile</h2><span class="muted">CampusBite account</span></div>
+ <div class="real-profile-banner">
+   <div class="real-profile-banner-content">
+     <div class="real-profile-kicker">🥫 CampusBite • Your campus food hub</div>
+     <h3>Make every campus meal a little smarter.</h3>
+     <p>Your CampusBite account keeps your orders, rewards and campus dining experience together — simple, fast and made for campus life.</p>
+     <div class="real-profile-pills">
+       <span class="real-profile-pill">⚡ Quick ordering</span>
+       <span class="real-profile-pill">♻️ Smarter choices</span>
+       <span class="real-profile-pill">🎁 Rewards & points</span>
+     </div>
+   </div>
+ </div>
+
+ <div class="card"><div style="display:flex;gap:13px;align-items:center"><div class="avatar" id="customerAvatar" style="width:56px;height:56px">ST</div><div><b id="customerProfileName" style="font-size:18px">Customer</b><div id="customerProfileMeta" class="muted">CampusBite • Customer</div></div></div></div>
+ <div class="dashboard" style="margin-top:12px"><div class="metric">Orders<b id="pOrders">0</b></div><div class="metric">Points<b id="pPoints">0</b></div><div class="metric">Saved<b id="pSaved">₹0</b></div><div class="metric">Status<b>Active</b></div></div>
+</section>
+
+<section id="staff" class="view">
+ <div class="section"><h2>Canteen staff console <span id="staffShopTitle" class="staff-console-shop">Shop</span></h2><span class="badge">● LIVE DEMO</span></div>
+ <div class="dashboard"><div class="metric">Orders<b id="sOrders">24</b><span class="muted">today</span></div><div class="metric">Revenue<b id="sRevenue">₹3,480</b><span class="muted">today</span></div><div class="metric">Prep time<b id="sPrepTime">5.0 min</b><span class="muted">average</span></div><div class="metric">Queue<b id="sQueue">0</b><span class="muted">active</span></div></div>
+ <div class="staff-rating-card" aria-label="Shop average customer rating"><div class="staff-rating-label">Average shop rating</div><div class="staff-rating-value"><div id="staffRatingStars" class="staff-rating-stars" aria-hidden="true"></div><span id="staffRatingNumber" class="staff-rating-number">— / 5</span></div></div>
+ <div class="section"><h2>Live kitchen queue</h2><span class="muted">Advance orders as prepared</span></div><div class="card"><div id="queue" class="staffQueue"></div></div>
+ <div class="simpleWasteCard staff-waste-spacing">
+  <div id="simpleWasteRecommendations"></div>
+</div>
+<div class="section"><h2>Menu control</h2></div><div class="card" id="menuControl"></div>
+</section>
+</main>
+</div>
+<nav class="mobileNav"><button class="active" data-view="home"><span>🏠</span>Home</button><button data-view="menu"><span>🍽️</span>Menu</button><button data-view="cart"><span>🛒</span>Cart</button><button data-view="tracking"><span>📍</span>Tracking</button><button data-view="history"><span>🧾</span>History</button><button data-view="wallet"><span>💳</span>Wallet</button></nav>
+</div>
+
+<div class="modal" id="checkoutModal">
+<style>
+.checkoutRedesign{max-width:620px!important;max-height:calc(100vh - 32px);padding:0!important;overflow-y:auto;overflow-x:hidden;background:#fff;border-radius:24px;box-shadow:0 24px 70px rgba(15,23,42,.22)}
+.checkoutHero{padding:24px 26px 20px;background:linear-gradient(135deg,#111827,#26324a);color:#fff;position:relative}
+.checkoutHero:after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;right:-55px;top:-70px;background:rgba(255,255,255,.07)}
+.checkoutHeroTop{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.checkoutHero h2{margin:0;font-size:24px;letter-spacing:-.4px}
+.checkoutHero p{margin:7px 0 0;color:rgba(255,255,255,.72);font-size:13px}
+.checkoutClose{border:0;background:rgba(255,255,255,.1);color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer}
+.checkoutBody{padding:22px 26px 26px}
+.checkoutSectionLabel{font-size:11px;font-weight:800;letter-spacing:1px;color:#64748b;margin-bottom:10px}
+.trackingOrder,.historyOrder{padding:16px 18px;margin-bottom:12px}.trackingOrder .steps{margin-top:14px}.historyOrder .orderTop{margin-bottom:2px}.historyOrder .badge{font-size:12px}.trackingOrder .token{margin-top:14px;padding:10px 12px}.trackingOrder .row.total,.historyOrder .row.total{padding-top:10px;border-top:1px solid #e2e8f0}.pickupCard{border:1px solid #e2e8f0;border-radius:16px;padding:15px;background:#f8fafc}
+.splitRequestCard{margin-top:13px}.splitRequest{padding:14px 15px;border:1px solid #e2e8f0;border-radius:14px;background:#fff;margin-top:10px}.splitRequestTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.splitRequestTitle{font-weight:850;color:#172033}.splitRequestMeta{font-size:12px;color:#64748b;margin-top:4px;line-height:1.45}.splitRequestAmount{font-size:19px;font-weight:900;color:#172033;white-space:nowrap}.splitRequestActions{display:flex;gap:8px;margin-top:12px}.splitRequestActions button{flex:1}.splitPending{color:#b7791f}.splitApproved{color:var(--green)}.splitRejected{color:#64748b}.splitRequestEmpty{padding:14px 0;color:#64748b;font-size:13px}.splitRequestNotice{margin-top:10px;padding:10px 12px;border-radius:11px;background:#f8fafc;color:#475569;font-size:12px}.pickupSelect{width:100%;height:48px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;padding:0 14px;font-size:15px;font-weight:700;color:#172033;outline:none;appearance:none !important;-webkit-appearance:none !important;-moz-appearance:none !important;background-image:none !important}.pickupSelect::-ms-expand{display:none !important}
+.pickupSelect:focus{border-color:#64748b;box-shadow:0 0 0 3px rgba(100,116,139,.12)}
+.pickupHint{display:flex;gap:8px;align-items:center;margin-top:9px;color:#64748b;font-size:12px}
+.checkoutSummaryCard{margin-top:20px;border:1px solid #e2e8f0;border-radius:16px;padding:16px;background:#fff}
+.checkoutSummaryCard .summaryTitle{font-weight:800;font-size:14px;margin-bottom:12px;color:#172033}
+.checkoutSummaryCard .row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;color:#64748b;font-size:13px}
+.checkoutSummaryCard .row b{color:#172033}
+.checkoutSummaryCard .total{border-top:1px dashed #cbd5e1;margin-top:7px;padding-top:14px;color:#172033;font-size:16px}
+.checkoutSummaryCard .total span:last-child{font-size:21px;font-weight:900}
+.walletPay{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding:13px 14px;border-radius:14px;background:#f1f5f9;border:1px solid #e2e8f0}
+.walletPayLeft{display:flex;align-items:center;gap:10px}
+.walletIcon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:#fff;font-size:19px;box-shadow:0 2px 8px rgba(15,23,42,.07)}
+.walletPay b{font-size:13px;color:#172033}
+.walletPay small{display:block;color:#64748b;margin-top:2px}
+.checkoutAction{width:100%;height:52px;margin-top:18px;border:0;border-radius:14px;background:#111827;color:#fff;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 8px 20px rgba(17,24,39,.18)}
+.checkoutAction:hover{transform:translateY(-1px);box-shadow:0 11px 24px rgba(17,24,39,.22)}
+.checkoutSecure{text-align:center;color:#94a3b8;font-size:11px;margin-top:11px}.splitBillBox{margin-top:14px;padding:14px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc}.splitBillHead{display:flex;align-items:center;justify-content:space-between;gap:12px}.splitBillHead b{font-size:13px;color:#172033}.splitBillToggle{display:flex;align-items:center;gap:7px;font-size:12px;color:#475569;cursor:pointer}.splitBillFields{display:none;margin-top:11px;gap:9px}.splitBillFields.open{display:grid;grid-template-columns:1.35fr .85fr}.splitBillFields input{width:100%;height:42px;border:1px solid #cbd5e1;border-radius:10px;padding:0 11px;font-size:13px;box-sizing:border-box;outline:none;background:#fff}.splitBillFields input:focus{border-color:#64748b;box-shadow:0 0 0 3px rgba(100,116,139,.12)}.splitBillHint{font-size:11px;color:#64748b;margin-top:8px}.splitBillResult{font-size:11px;font-weight:700;margin-top:7px;color:var(--green)}
+@media (max-height:820px) and (min-width:601px){
+  .checkoutRedesign{max-height:calc(100vh - 28px);overflow-y:auto}
+  .checkoutHero{padding:18px 24px 15px}
+  .checkoutHero h2{font-size:21px}
+  .checkoutBody{padding:16px 24px 20px}
+  .checkoutSummaryCard{margin-top:14px;padding:13px}
+  .checkoutSummaryCard .row{padding:5px 0}
+  .walletPay{margin-top:10px;padding:10px 12px}
+  .checkoutAction{height:48px;margin-top:12px}
+  .checkoutSecure{margin-top:7px}
+}
+@media (max-height:700px) and (min-width:601px){
+  .checkoutHero{padding:14px 20px 12px}
+  .checkoutBody{padding:12px 20px 16px}
+  .pickupCard{padding:10px}
+  .pickupSelect{height:42px}
+  .pickupHint{margin-top:6px}
+  .checkoutSummaryCard{margin-top:10px}
+  .walletPay{margin-top:8px}
+  .checkoutAction{height:44px;margin-top:9px}
+}
+@media(max-width:600px){
+  .checkoutRedesign{max-height:calc(100vh - 18px);overflow-y:auto}
+  .checkoutBody{padding:18px}
+  .checkoutHero{padding:20px}
+  .checkoutRedesign{border-radius:20px}
+}
+ 
+#checkoutModal{align-items:flex-start;justify-content:center;overflow-y:auto;overflow-x:hidden;padding:12px}
+#checkoutModal .checkoutRedesign{margin:auto;max-height:none;overflow:visible}
+@media(max-height:760px){
+  #checkoutModal{padding:8px}
+  #checkoutModal .checkoutRedesign{margin:0 auto}
+  #checkoutModal .checkoutHero{padding:18px 22px 14px}
+  #checkoutModal .checkoutBody{padding:14px 22px 18px}
+  #checkoutModal .pickupCard{padding:11px}
+  #checkoutModal .pickupSelect{height:44px}
+  #checkoutModal .checkoutSummaryCard{margin-top:12px;padding:13px}
+  #checkoutModal .walletPay{margin-top:10px;padding:10px 12px}
+  #checkoutModal .checkoutAction{height:46px;margin-top:11px}
+}
+</style>
+<div class="modalBox checkoutRedesign">
+  <div class="checkoutHero">
+    <div class="checkoutHeroTop">
+      <div>
+        <h2>Ready to order? 🍱</h2>
+        <p>Choose when you want to collect your food.</p>
+      </div>
+      <button class="checkoutClose" id="closeModal" aria-label="Close checkout">✕</button>
+    </div>
+  </div>
+  <div class="checkoutBody">
+    <div class="checkoutSectionLabel">PICKUP TIME</div>
+    <div class="pickupCard">
+      <select id="slot" class="pickupSelect" aria-label="Choose pickup time">
+        <option value="ASAP">ASAP</option>
+        <option disabled>──────── Scheduled pickup ────────</option>
+        <option>8:00 AM</option><option>8:15 AM</option><option>8:30 AM</option><option>8:45 AM</option>
+        <option>9:00 AM</option><option>9:15 AM</option><option>9:30 AM</option><option>9:45 AM</option>
+        <option>10:00 AM</option><option>10:15 AM</option><option>10:30 AM</option><option>10:45 AM</option>
+        <option>11:00 AM</option><option>11:15 AM</option><option>11:30 AM</option><option>11:45 AM</option>
+        <option>12:00 PM</option><option>12:15 PM</option><option>12:30 PM</option><option>12:45 PM</option>
+        <option>1:00 PM</option><option>1:15 PM</option><option>1:30 PM</option><option>1:45 PM</option>
+        <option>2:00 PM</option><option>2:15 PM</option><option>2:30 PM</option><option>2:45 PM</option>
+        <option>3:00 PM</option><option>3:15 PM</option><option>3:30 PM</option><option>3:45 PM</option>
+        <option>4:00 PM</option>
+      </select>
+      <div class="pickupHint">🕐 <span>Pick a time that works with your class schedule.</span></div>
+    </div>
+
+    <div class="checkoutSummaryCard" id="checkoutSummary"></div>
+
+    <div class="splitBillBox">
+      <div class="splitBillHead">
+        <b>Split bill</b>
+        <label class="splitBillToggle"><input type="checkbox" id="splitBillToggle"> Pay part with another Campus Wallet</label>
+      </div>
+      <div class="splitBillFields" id="splitBillFields">
+        <input id="splitWalletId" type="text" maxlength="40" autocomplete="off" placeholder="Other Customer / Wallet ID">
+        <input id="splitAmount" type="number" min="1" step="0.01" inputmode="decimal" placeholder="Amount ₹">
+      </div>
+      <div class="splitBillHint" id="splitBillHint">Enter another student/teacher Customer ID and the amount you want them to approve and pay.</div>
+      <div class="splitBillResult" id="splitBillResult"></div>
+    </div>
+
+    <div class="walletPay">
+      <div class="walletPayLeft">
+        <div class="walletIcon">💳</div>
+        <div><b>Campus Wallet</b><small>Payment will be deducted automatically</small></div>
+      </div>
+
+    </div>
+
+    <button type="button" class="checkoutAction" id="confirm">Place Order&nbsp; →</button>
+    <div class="checkoutSecure">🔒 Secure demo checkout • No external payment is processed</div>
+  </div>
+</div>
+</div>
+<div class="modal" id="moneyModal"><div class="modalBox"><div class="modalHead"><h2>Add money</h2><button class="close" id="closeMoney">✕</button></div><p class="muted">Demo wallet — no real payment is processed.</p><div class="field"><label>AMOUNT</label><select id="moneyAmount"><option value="250">₹250</option><option value="500">₹500</option><option value="1000">₹1,000</option><option value="2000">₹2,000</option></select></div><button class="primary" id="confirmMoney">Add to wallet</button></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const MENU=[
+{id:101,shop:"Hari Sandwich",name:"Chicken Sandwich",price:75,emoji:"🥪",cat:"Sandwiches",desc:"Grilled chicken, lettuce & house sauce",pop:96,stock:18,img:"https://images.pexels.com/photos/1647163/pexels-photo-1647163.jpeg?auto=compress&cs=tinysrgb&w=900",available:true,diet:["Non-veg", "Contains gluten"],ingredients:["Chicken", "Lettuce", "House sauce"]},
+{id:102,shop:"Hari Sandwich",name:"Veg Club Sandwich",price:65,emoji:"🥪",cat:"Sandwiches",desc:"Triple-layer grilled vegetable sandwich",pop:94,stock:16,img:"https://images.pexels.com/photos/1600711/pexels-photo-1600711.jpeg?auto=compress&cs=tinysrgb&w=900",available:true,diet:["Vegetarian", "Contains gluten"],ingredients:["Bread", "Vegetables", "Cheese"]},
+{id:103,shop:"Hari Sandwich",name:"Paneer Wrap",price:80,emoji:"🌯",cat:"Wraps",desc:"Spiced paneer, vegetables & mint sauce",pop:92,stock:14,img:"https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=900",available:true,diet:["Vegetarian", "Contains gluten"],ingredients:["Paneer", "Vegetables", "Mint sauce"]},
+{id:104,shop:"Hari Sandwich",name:"Cheese Toastie",price:55,emoji:"🥪",cat:"Grilled",desc:"Crispy toast with melted cheese",pop:90,stock:20,img:"https://images.pexels.com/photos/1351238/pexels-photo-1351238.jpeg?auto=compress&cs=tinysrgb&w=900",available:true,diet:["Vegetarian", "Contains gluten"],ingredients:["Bread", "Cheese", "Butter"]},
+{id:201,shop:"Reo Store",name:"Lays Classic",price:30,emoji:"🥔",cat:"Snacks",desc:"Crispy salted potato chips",pop:95,stock:30,img:"https://images.pexels.com/photos/568805/pexels-photo-568805.jpeg?auto=compress&cs=tinysrgb&w=900",available:true,diet:["Vegetarian", "Gluten-free*"],ingredients:["Potato","Salt","Vegetable oil"]},
+{id:202,shop:"Reo Store",name:"French Fries",price:25,emoji:"🌽",cat:"Snacks",desc:"Crunchy spicy corn snack",pop:93,stock:25,img:"https://images.pexels.com/photos/1583884/pexels-photo-1583884.jpeg?auto=compress&cs=tinysrgb&w=900",available:true,diet:["Vegetarian", "Gluten-free*"],ingredients:["Potato","Corn seasoning","Vegetable oil"]},
+{id:203,shop:"Reo Store",name:"Cold Cola",price:40,emoji:"🥤",cat:"Drinks",desc:"Chilled fizzy cola",pop:90,stock:22,img:"https://images.pexels.com/photos/2983100/pexels-photo-2983100.jpeg?auto=compress&cs=tinysrgb&w=900",available:true,diet:["Vegetarian", "Gluten-free*"],ingredients:["Carbonated water","Cola syrup","Sugar"]},
+{id:204,shop:"Reo Store",name:"Mango Drink",price:35,emoji:"🥭",cat:"Drinks",desc:"Chilled mango fruit drink",pop:89,stock:18,img:"https://images.pexels.com/photos/96974/pexels-photo-96974.jpeg?auto=compress&cs=tinysrgb&w=900",available:true,diet:["Vegetarian", "Gluten-free*"],ingredients:["Mango","Water","Sugar"]},
+{id:301,shop:"Campus Café",name:"Cappuccino",price:75,emoji:"☕",cat:"Coffee",desc:"Fresh espresso with steamed milk foam",pop:96,stock:14,img:"https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=900",available:true,diet:["Vegetarian", "Contains dairy"],ingredients:["Espresso","Milk","Milk foam"]},
+{id:302,shop:"Campus Café",name:"Masala Chai",price:30,emoji:"☕",cat:"Tea",desc:"Hot spiced Indian tea",pop:94,stock:24,img:"https://images.pexels.com/photos/1417945/pexels-photo-1417945.jpeg?auto=compress&cs=tinysrgb&w=900",available:true,diet:["Vegetarian", "Contains dairy"],ingredients:["Tea","Milk","Spices"]},
+{id:303,shop:"Campus Café",name:"Veg Hakka Noodles",price:90,emoji:"🍜",cat:"Meals",desc:"Wok-tossed noodles with vegetables",pop:92,stock:15,img:"https://images.pexels.com/photos/2347311/pexels-photo-2347311.jpeg?auto=compress&cs=tinysrgb&w=900",available:true,diet:["Vegetarian", "Contains gluten"],ingredients:["Noodles","Mixed vegetables","Soy sauce"]},
+{id:304,shop:"Campus Café",name:"Chocolate Muffin",price:55,emoji:"🧁",cat:"Bakery",desc:"Soft chocolate chip muffin",pop:91,stock:17,img:"https://images.pexels.com/photos/205961/pexels-photo-205961.jpeg?auto=compress&cs=tinysrgb&w=900",available:true,diet:["Vegetarian", "Contains gluten"],ingredients:["Wheat flour","Chocolate chips","Milk"]}
+];
+let cart={},orders=[],offer=false,category="All",seq=100,wallet=1250,ratings={},splitRequests=[];
+let checkoutBusy=false;
+let checkoutRequestId="";
+const popularPicksByShop={};
+const SHOP_MAP={"1":"Hari Sandwich","2":"Reo Store","3":"Campus Café"};
+let selectedShop=localStorage.getItem("campusBiteSelectedShop") || "Reo Store";
+const SHOP_QUEUE={"Hari Sandwich":"6 min","Reo Store":"2 min","Campus Café":"10 min"};
+const SHOP_PREP_BASE={"Hari Sandwich":6,"Reo Store":4,"Campus Café":8};
+let transactions=[
+ {icon:"🎁",title:"Welcome cashback",sub:"CampusBite reward",amt:75,type:"credit"},
+ {icon:"💳",title:"Wallet loaded",sub:"Demo opening balance",amt:1250,type:"credit"}
+];
+const $=id=>document.getElementById(id);
+
+function toast(t){$("toast").textContent=t;$("toast").classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>$("toast").classList.remove("show"),1700)}
+function view(v){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));$(v).classList.add("active");document.querySelectorAll("[data-view]").forEach(x=>x.classList.toggle("active",x.dataset.view===v));render()}
+document.addEventListener("click",e=>{const n=e.target.closest("[data-view]");if(n)view(n.dataset.view)});
+$("browseBtn").onclick=()=>view("menu");$("cartHead").onclick=()=>view("cart");$("walletHead").onclick=()=>view("wallet");
+$("applyOffer").onclick=()=>{if(totals().sub<200){offer=false;toast("Minimum order ₹200 required for CAMPUS10");return;}offer=true;$("applyOffer").textContent="Applied ✓";toast("CAMPUS10 applied — 10% discount")};
+$("search").addEventListener("input",renderMenu);$("sort").addEventListener("change",renderMenu);
+
+function foodCard(x){let q=cart[x.id]||0,tags=[];
+(x.diet||[]).slice(0,2).forEach(t=>tags.push(`<span class="smartTag">${t}</span>`));
+(x.ingredients||[]).slice(0,3).forEach(t=>tags.push(`<span class="smartTag">${t}</span>`));
+return `<article class="food"><div class="foodPic"><img src="${x.img}" alt="${x.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.opacity='1'"><span class="photoFallback">${x.emoji}</span></div><h3>${x.name}</h3><div class="muted">${x.desc}</div><div class="foodSmart">${tags.join('')}</div><div class="foodFoot"><span class="price">₹${x.price}</span>${q?`<div class="qty"><button data-id="${x.id}" data-d="-1">−</button><b>${q}</b><button data-id="${x.id}" data-d="1">+</button></div>`:`<button class="add" data-id="${x.id}" data-d="1">+ Add</button>`}</div></article>`}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-id]");if(b){const id=+b.dataset.id,d=+b.dataset.d,x=MENU.find(m=>m.id===id);if(!x)return;const next=Math.max(0,(cart[id]||0)+d);if(d>0&&x.stock!=null&&next>Number(x.stock)){toast("Only "+Number(x.stock)+" left in stock");return;}if(next===0)delete cart[id];else cart[id]=next;render();if(d>0)toast("Added to cart")}});
+
+function totals(){let sub=0,n=0;Object.entries(cart).forEach(([id,q])=>{const x=MENU.find(m=>m.id==id);sub+=x.price*q;n+=q});const discount=offer&&sub>=200?Math.round(sub*.10):0;const fee=n?3:0;return{n,sub,discount,fee,total:sub-discount+fee}}
+function renderHome(){
+  const shop=Object.values(SHOP_MAP).includes(selectedShop)?selectedShop:"Reo Store";
+  const currentShopItems=MENU.filter(x=>x.shop===shop&&x.available);
+  const availableIds=new Set(currentShopItems.map(x=>x.id));
+  let picks=(popularPicksByShop[shop]||[]).filter(id=>availableIds.has(id)).map(id=>currentShopItems.find(x=>x.id===id)).filter(Boolean);
+  if(picks.length<2){
+    const remaining=currentShopItems.filter(x=>!picks.some(p=>p.id===x.id));
+    const shuffled=[...remaining].sort(()=>Math.random()-0.5);
+    picks=picks.concat(shuffled.slice(0,2-picks.length));
+    popularPicksByShop[shop]=picks.map(x=>x.id);
+  }
+  $("homeGrid").innerHTML=picks.map(foodCard).join("");
+  const wait=$("queueWait");
+  if(wait)wait.textContent=SHOP_QUEUE[shop]||"2 min";
+}
+
+function renderMenu(){
+ const shop=Object.values(SHOP_MAP).includes(selectedShop)?selectedShop:"Reo Store";
+ const q=$("search").value.toLowerCase(),sort=$("sort").value;
+ let a=MENU.filter(x=>x.shop===shop&&x.available&&(!q||x.name.toLowerCase().includes(q)));
+ a.sort((x,y)=>sort==="low"?x.price-y.price:sort==="high"?y.price-x.price:y.pop-x.pop);
+ const cats=["All",...new Set(a.map(x=>x.cat))];
+ if(category!=="All"&&!cats.includes(category))category="All";
+ if(category!=="All")a=a.filter(x=>x.cat===category);
+ $("chips").innerHTML=cats.map(c=>`<button class="chip ${c===category?"active":""}" data-cat="${c}">${c}</button>`).join("");
+ $("menuGrid").innerHTML=a.length?a.map(foodCard).join(""):`<div class="empty">No items available at this shop.</div>`;
+ document.querySelectorAll("[data-cat]").forEach(btn=>btn.onclick=()=>{category=btn.dataset.cat;renderMenu()});
+ const label=$("selectedShopMenu"); if(label)label.textContent=shop;
+ document.querySelectorAll("#shopMenuFilter [data-shop]").forEach(btn=>btn.classList.toggle("active",btn.dataset.shop===shop));
+}
+
+function renderCart(){
+ const t=totals();$("cartCount").textContent=t.n;$("cartMeta").textContent=t.n?`${t.n} item${t.n>1?"s":""}`:"";
+ if(!t.n){$("cartItems").innerHTML='<div class="empty"><div style="font-size:42px">🍱</div><b>Your cart is empty</b><p>Add something from today’s canteen menu.</p></div>';$("summary").innerHTML='<h3>Order summary</h3><div class="muted">Your total will appear here.</div>';return}
+ $("cartItems").innerHTML=Object.entries(cart).map(([id,q])=>{const x=MENU.find(m=>m.id==id);return `<div class="cartItem"><div class="mini">${x.emoji}</div><div class="grow"><b>${x.name}</b><div class="muted">₹${x.price} each</div></div><div class="qty"><button data-id="${x.id}" data-d="-1">−</button><b>${q}</b><button data-id="${x.id}" data-d="1">+</button></div><b>₹${x.price*q}</b></div>`}).join("");
+ $("summary").innerHTML=`<h3>Order summary</h3><div class="row"><span>Food</span><b>₹${t.sub}</b></div>${t.discount?`<div class="row discount"><span>CAMPUS10 • 10% off</span><b>− ₹${t.discount}</b></div>`:""}<div class="row"><span>Convenience fee</span><b>₹${t.fee}</b></div><div class="row total"><span>Total</span><span>₹${t.total}</span></div><div class="row"><span>Paying with</span><b>Campus Wallet</b></div><button type="button" class="primary" id="checkoutBtn" onclick="openCheckout();return false;">Proceed to checkout →</button>${wallet<t.total?`<div class="muted" style="margin-top:9px;color:var(--red)">Wallet balance is ₹${wallet}. Add money before paying.</div>`:`<div class="muted" style="margin-top:9px">Wallet balance after payment: ₹${wallet-t.total}</div>`}`;
+ bindCheckoutButton();
+}
+
+function bindCheckoutButton(){const b=$("checkoutBtn");if(!b)return;b.onclick=(event)=>{event.preventDefault();try{openCheckout()}catch(err){console.error("CampusBite checkout open failed:",err);toast(err?.message||"Checkout could not be opened. Please try again.")}}}
+
+function openCheckout(){
+  if(checkoutBusy)return;
+  checkoutRequestId=(globalThis.crypto?.randomUUID?.()||("cb_"+Date.now()+"_"+Math.random().toString(36).slice(2))).replace(/[^A-Za-z0-9_-]/g,"").slice(0,70);
+  const t=totals();
+  if(!t.n){toast('Your cart is empty');return;}
+  $("checkoutSummary").innerHTML=`<div class="summaryTitle">Order summary</div><div class="row"><span>Food subtotal</span><b>₹${t.sub}</b></div>${t.discount?`<div class="row discount"><span>CAMPUS10 discount</span><b>− ₹${t.discount}</b></div>`:""}<div class="row"><span>Convenience fee</span><b>₹${t.fee}</b></div><div class="row total"><span>Order total</span><span>₹${t.total}</span></div><div class="row"><span>Your wallet balance</span><b>₹${wallet}</b></div>`;
+  $("splitBillToggle").checked=false;
+  $("splitBillFields").classList.remove('open');
+  $("splitWalletId").value='';
+  $("splitAmount").value='';
+  const cf=$("confirm");
+  if(cf){cf.disabled=false;cf.textContent='Place Order →';}
+  if(typeof window.campusBiteUpdateSplitBillPreview==='function') window.campusBiteUpdateSplitBillPreview();
+  $("checkoutModal").classList.add('open');
+}
+$("closeModal").onclick=()=>$("checkoutModal").classList.remove("open");
+
+/* Production build: order creation is handled exclusively by /api/customer/order. */
+
+function renderOrders(){
+ const active=orders.filter(o=>Number(o.status)<3);
+ const completed=orders.filter(o=>Number(o.status)>=3);
+ const statusNames=["Received","Preparing","Ready"];
+ if(!active.length){$("trackingList").innerHTML='<div class="card empty"><div style="font-size:38px">📍</div><b>No active orders</b><p>When you place an order, its live status will appear here until it is completed.</p><button class="primary" data-view="menu">Browse menu</button></div>';}
+ else {$("trackingList").innerHTML=active.map(o=>`<div class="card order trackingOrder"><div class="orderTop"><div><b>${o.id}</b><div class="muted">${o.shop||"Central Campus Canteen"} • Pickup • ${o.slot}</div></div><span class="badge">${statusNames[o.status]}</span></div><div class="muted" style="margin-top:10px">${o.items.map(i=>`${i.emoji} ${i.name} × ${i.q}`).join(" • ")}</div><div class="steps">${statusNames.map((s,i)=>`<div class="step ${i<=o.status?"done":""}"><div class="stepDot">${i<=o.status?"✓":""}</div>${s}</div>`).join("")}</div><div class="token"><span class="muted">PICKUP TOKEN</span><strong>${o.id.replace("CB-","A-")}</strong><span class="muted">Show this token when collecting your order</span></div><div class="row total"><span>Total</span><span>₹${o.total}</span></div></div>`).join("");}
+ if(!completed.length){$("historyList").innerHTML='<div class="card empty"><div style="font-size:38px">🧾</div><b>No completed orders yet</b><p>Your completed orders will be preserved here.</p></div>';}
+ else {$("historyList").innerHTML=completed.map(o=>{const r=ratings[String(o.id)]?.rating||0;return `<div class="card order historyOrder"><div class="orderTop"><div><b>${o.id}</b><div class="muted">${o.shop||"Central Campus Canteen"} • Pickup • ${o.slot}</div></div><span class="badge">Completed</span></div><div class="muted" style="margin-top:10px">${o.items.map(i=>`${i.emoji} ${i.name} × ${i.q}`).join(" • ")}</div><div class="row total"><span>Total</span><span>₹${o.total}</span></div><div class="ratingBox">${r?`<div class="ratingLabel">Your rating</div><div class="ratingStars" aria-label="Your rating: ${r} out of 5 stars">${[1,2,3,4,5].map(n=>`<span class="ratingStar ${n<=r?'active':''}">★</span>`).join('')}</div><div class="ratingSaved">Rating submitted</div>`:`<div class="ratingLabel">Rate your order</div><div class="ratingStars">${[1,2,3,4,5].map(n=>`<button type="button" class="ratingStar" data-rate-order="${o.id}" data-rating="${n}" aria-label="Rate ${n} star${n>1?'s':''}">★</button>`).join('')}</div>`}</div></div>`}).join("");}
+}
+
+function renderSplitRequests(){
+ const el=$("splitRequestsList"); if(!el)return;
+ const incoming=splitRequests.filter(r=>r.direction==='incoming'&&r.status==='pending');
+ const recent=splitRequests.filter(r=>!(r.direction==='incoming'&&r.status==='pending')).slice(0,6);
+ const incomingHtml=incoming.length?incoming.map(r=>`<div class="splitRequest"><div class="splitRequestTop"><div><div class="splitRequestTitle">${r.requesterName||'Customer'} requested ₹${r.amount.toLocaleString('en-IN')}</div><div class="splitRequestMeta">${r.requesterCode||''} • ${r.shop} • ${r.slot}<br>Order total ₹${r.total.toLocaleString('en-IN')} • Your contribution ₹${r.amount.toLocaleString('en-IN')}</div></div><div class="splitRequestAmount">₹${r.amount.toLocaleString('en-IN')}</div></div><div class="splitRequestNotice">Approving will immediately deduct ₹${r.amount.toLocaleString('en-IN')} from your Campus Wallet and create the order for ${r.requesterName||'the requester'}.</div><div class="splitRequestActions"><button class="primary" data-split-action="approve" data-split-id="${r.id}">Approve & Pay</button><button class="secondary" data-split-action="reject" data-split-id="${r.id}">Reject</button></div></div>`).join(''):'<div class="splitRequestEmpty">No pending split bill requests.</div>';
+ const recentHtml=recent.map(r=>{const other=r.direction==='outgoing'?(r.contributorName||'Customer'):(r.requesterName||'Customer');const label=r.status==='approved'?'Approved':r.status==='rejected'?'Rejected':'Pending';const cls=r.status==='approved'?'splitApproved':r.status==='rejected'?'splitRejected':'splitPending';return `<div class="splitRequest"><div class="splitRequestTop"><div><div class="splitRequestTitle">${r.direction==='outgoing'?'Request to '+other:other}</div><div class="splitRequestMeta">${r.direction==='outgoing'?(r.contributorCode||''):(r.requesterCode||'')} • ${r.shop}</div></div><div class="splitRequestAmount ${cls}">${label}</div></div><div class="splitRequestMeta" style="margin-top:8px">₹${r.amount.toLocaleString('en-IN')} contribution${r.orderId?' • Order '+r.orderId:''}</div></div>`}).join('');
+ el.innerHTML=incomingHtml+(recentHtml?`<div class="splitRequestMeta" style="margin-top:13px;font-weight:800;color:#172033">Recent requests</div>${recentHtml}`:'');
+}
+
+
+function renderWallet(){
+ renderSplitRequests();
+ $("walletBalance").textContent=wallet.toLocaleString("en-IN");$("headBalance").textContent=wallet.toLocaleString("en-IN");
+ const spent=orders.reduce((a,o)=>a+o.total,0),saved=orders.reduce((a,o)=>a+(o.discount||0),0);
+ $("walletSpent").textContent="₹"+spent;$("walletCashback").textContent="₹"+(75+Math.floor(spent*.01));$("walletPoints").textContent=Math.floor(spent/10);
+ $("transactions").innerHTML=transactions.slice(0,6).map(t=>{const isOrder=t.type==="debit"&&t.shop&&t.food;return `<div class="transaction"><div class="txIcon">${t.icon}</div><div class="grow"><b>${isOrder?`${t.shop} • ${t.food}`:t.title}</b>${isOrder?"":`<div class="muted">${t.sub}</div>`}</div><b class="${t.type==="credit"?"credit":"debit"}">${t.type==="credit"?"+":"−"} ₹${t.amt}</b></div>`}).join("")
+}
+
+$("addMoney").onclick=()=>$("moneyModal").classList.add("open");
+$("closeMoney").onclick=()=>$("moneyModal").classList.remove("open");
+/* Production build: wallet top-up is handled exclusively by /api/customer/wallet/topup. */
+$("walletHistory").onclick=()=>toast("Showing latest wallet activity below");
+
+
+function renderWasteIntelligence(shop){
+  const fmtDay=(date)=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(date);
+  const addDays=(key,delta)=>{const d=new Date(key+'T00:00:00+05:30');d.setUTCDate(d.getUTCDate()+delta);return fmtDay(d);};
+  const todayKey=fmtDay(new Date());
+  const priorDays=[1,2,3].map(n=>addDays(todayKey,-n));
+  const shopOrders=orders.filter(o=>(o.shop||'')===shop && o.createdAt);
+  const menu=MENU.filter(x=>x.shop===shop);
+
+  // Food W Helper is a read-only staff recommendation. It uses only the
+  // orders already loaded for this staff member's shop plus current menu stock.
+  // No customer-side flow, order creation, checkout, or inventory is changed.
+  const salesByDay={};
+  const soldToday={};
+  shopOrders.forEach(o=>{
+    const day=fmtDay(new Date(o.createdAt));
+    (o.items||[]).forEach(i=>{
+      const menuItem=i.id
+        ? MENU.find(m=>Number(m.id)===Number(i.id) && m.shop===shop)
+        : MENU.find(m=>m.name===i.name && m.shop===shop);
+      if(!menuItem)return;
+      const qty=Math.max(0,Number(i.q)||0);
+      if(!qty)return;
+      if(!salesByDay[menuItem.id])salesByDay[menuItem.id]={};
+      salesByDay[menuItem.id][day]=(salesByDay[menuItem.id][day]||0)+qty;
+      if(day===todayKey)soldToday[menuItem.id]=(soldToday[menuItem.id]||0)+qty;
+    });
+  });
+
+  const recommendations=menu.map(item=>{
+    const todaySold=Math.max(0,Number(soldToday[item.id]||0));
+    const history=salesByDay[item.id]||{};
+    const priorValues=priorDays.map(day=>Number(history[day]||0));
+    const hasHistory=priorValues.some(v=>v>0);
+    const recentAverage=priorValues.reduce((a,b)=>a+b,0)/priorValues.length;
+    const recommended=hasHistory
+      ? Math.max(0,Math.round((todaySold*0.70)+(recentAverage*0.30)))
+      : todaySold;
+    const left=Math.max(0,Number(item.stock)||0);
+    const prepare=Math.max(0,recommended-left);
+    return {item,todaySold,left,recommended,prepare,hasHistory,recentAverage};
+  });
+
+  $('simpleWasteRecommendations').innerHTML=`<div class="simpleWasteHeader"><div><div class="simpleWasteTitle">${shop}</div><div class="simpleWasteShop">Live demand guidance</div></div><span class="simpleWasteLive">LIVE DATA</span></div>`+recommendations.map(r=>`
+    <div class="simpleWasteItem">
+      <span class="simpleWasteEmoji">${r.item.emoji}</span>
+      <div class="simpleWasteFoodInfo">
+        <b>${r.item.name}</b>
+        <div class="simpleWasteMetrics"><span>Sold today <strong>${r.todaySold}</strong></span><span>Left now <strong>${r.left}</strong></span></div>
+        <div class="simpleWasteRecommendation">Recommendation: <strong>${r.recommended}</strong> units</div>
+      </div>
+      <div class="simpleWastePrepare"><span>Prepare tomorrow</span><strong>${r.prepare}</strong></div>
+    </div>
+  `).join('');
+}
+
+/* Production build: staff console is rendered exclusively from API responses by loadStaff(). */
+function renderProfile(){const spent=orders.reduce((a,o)=>a+o.total,0);$("pOrders").textContent=orders.length;$("pPoints").textContent=Math.floor(spent/10);$("pSaved").textContent="₹"+orders.reduce((a,o)=>a+(o.discount||0),0)}
+function render(){renderHome();renderMenu();renderCart();renderOrders();renderWallet();renderProfile();$("cartCount").textContent=totals().n}
+render();
+</script>
+
+<script id="role-gate-js">
+(function(){
+  let roleSession=null;
+  const gate=document.getElementById("roleGate"), chooser=document.getElementById("roleChooser"), customerForm=document.getElementById("customerForm"), staffForm=document.getElementById("staffForm"), staffError=document.getElementById("staffError");
+  function showGate(){ if(!gate)return; gate.classList.remove("hidden"); if(chooser)chooser.style.display="block"; if(customerForm)customerForm.classList.remove("active"); if(staffForm)staffForm.classList.remove("active"); if(staffError)staffError.style.display="none"; }
+  function hideGate(){if(gate)gate.classList.add("hidden");}
+  function form(which){if(chooser)chooser.style.display="none"; if(customerForm)customerForm.classList.toggle("active",which==="customer"); if(staffForm)staffForm.classList.toggle("active",which==="staff"); const se=document.getElementById("customerError");if(se)se.style.display="none";if(staffError)staffError.style.display="none";}
+  function updateUserIdentity(){const u=roleSession||{};const name=(u.name||"Customer").trim();const parts=name.split(/\s+/).filter(Boolean);const initials=parts.slice(0,2).map(x=>x[0].toUpperCase()).join("")||"ST";const h=new Date().getHours();const greeting=h<12?"Good morning":h<17?"Good afternoon":"Good evening";const a=document.getElementById("headerAvatar"),g=document.getElementById("customerGreeting"),n=document.getElementById("customerProfileName"),m=document.getElementById("customerProfileMeta"),pa=document.getElementById("customerAvatar");if(a)a.textContent=initials;if(g&&u.role==="customer")g.textContent=greeting+", "+name.split(/\s+/)[0]+" 👋";if(n&&u.role==="customer")n.textContent=name;if(m&&u.role==="customer")m.textContent="CampusBite · "+(u.profileRole||"Student");if(pa&&u.role==="customer")pa.textContent=initials;const wi=document.getElementById("walletIdDisplay");if(wi&&u.role==="customer")wi.textContent="Campus Wallet • "+(u.customerCode||"");}
+  showGate();
+  document.getElementById("customerRole").onclick=()=>form("customer");
+  document.getElementById("staffRole").onclick=()=>form("staff");
+  document.querySelectorAll("[data-back]").forEach(b=>b.onclick=showGate);
+  window.campusBiteRole=()=>roleSession?roleSession.role:null;
+  window.campusBiteStaffShop=()=>roleSession&&roleSession.role==="staff"?roleSession.shop:null;
+  window.campusBiteUser=()=>roleSession;
+  window.campusBiteSetRoleSession=(s)=>{roleSession=s||null;updateUserIdentity();};
+  window.campusBiteSyncRoleUI=()=>{document.body.classList.toggle("staff-mode",roleSession?.role==="staff");document.body.classList.toggle("customer-mode",roleSession?.role==="customer");updateUserIdentity();};
+  window.campusBiteLogout=()=>{roleSession=null;document.body.classList.remove("staff-mode","customer-mode");showGate();};
+  window.campusBiteHideGate=hideGate;
+  window.campusBiteShowGate=showGate;
+  window.campusBiteUpdateIdentity=updateUserIdentity;
+})();
+</script>
+
+<script id="role-guard-js">
+(function(){
+  const originalView=window.view;
+  if(typeof originalView!=="function") return;
+
+  window.view=function(name){
+    const role=window.campusBiteRole&&window.campusBiteRole();
+
+    if(role==="staff"){
+      document.body.classList.add("staff-mode");
+      if(name!=="staff"){
+        if(typeof toast==="function") toast("Staff console only");
+        return;
+      }
+    }else if(role==="customer"){
+      document.body.classList.remove("staff-mode");
+      if(name==="staff"){
+        if(typeof toast==="function") toast("Staff access only");
+        return;
+      }
+    }else{
+      return;
+    }
+
+    return originalView(name);
+  };
+})();
+</script>
+
+<script>
+window.addEventListener("load",()=>{
+  const u=window.campusBiteUser&&window.campusBiteUser();
+  if(!u)return;
+  const candidates=[...document.querySelectorAll("header,nav,.topbar,.header")];
+  const host=candidates[0];
+  if(host&&!document.getElementById("roleBadge")){
+    const b=document.createElement("span");b.id="roleBadge";b.className="role-badge";b.textContent=u.role==="staff"?"STAFF":"CUSTOMER";host.appendChild(b);
+  }
+});
+</script>
+
+
+
+<script id="dynamic-customer-profile-js">
+(function(){
+  function applyCustomerIdentity(){
+    const u = window.campusBiteUser && window.campusBiteUser();
+    if(!u || u.role !== "customer") return;
+
+    const name = (u.name || "Customer").trim();
+    const year = (u.year || "Customer").trim();
+
+    // Update the visible customer name wherever the profile card currently
+    // contains the prototype's hard-coded identity.
+    const profile = document.getElementById("profile");
+    if(!profile) return;
+
+    const headings = profile.querySelectorAll("h1,h2,h3,h4,h5,strong,b");
+    headings.forEach(el=>{
+      const value=(el.textContent||"").trim();
+      if(value === "Customer Name"){
+        el.textContent=name;
+      }
+    });
+
+    // Update the subtitle while preserving the institution.
+    profile.querySelectorAll("*").forEach(el=>{
+      if(el.children.length===0){
+        const value=(el.textContent||"").trim();
+        if(value === "CampusBite · Customer"){
+          el.textContent = "CampusBite · " + year;
+        }
+      }
+    });
+
+    // Update initials/avatar if the prototype uses "UK".
+    profile.querySelectorAll("*").forEach(el=>{
+      if(el.children.length===0 && (el.textContent||"").trim()==="UK"){
+        const initials=name.split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase();
+        if(initials) el.textContent=initials;
+      }
+    });
+  }
+
+  window.addEventListener("load",()=>setTimeout(applyCustomerIdentity,150));
+  new MutationObserver(()=>setTimeout(applyCustomerIdentity,0))
+    .observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+
+<script id="customer-identity-final-js">
+(function(){
+  function getSession(){
+    try { return JSON.parse(sessionStorage.getItem("campusBiteRoleSession") || "null"); }
+    catch(e){ return null; }
+  }
+  function updateIdentity(){
+    const u=getSession();
+    if(!u || u.role!=="customer") return;
+    const name=(u.name||"Customer").trim();
+    const initials=name.split(/\s+/).filter(Boolean).slice(0,2).map(s=>s[0]).join("").toUpperCase()||"ST";
+    const h=new Date().getHours();
+    const greeting=h<12?"Good morning":h<17?"Good afternoon":"Good evening";
+
+    const n=document.getElementById("customerProfileName");
+    const m=document.getElementById("customerProfileMeta");
+    const a=document.getElementById("customerAvatar");
+    const g=document.getElementById("customerGreeting");
+    if(n) n.textContent=name;
+    if(m) m.textContent="CampusBite Customer";
+    if(a) a.textContent=initials;
+    if(g) g.textContent=greeting+", "+name.split(/\s+/)[0]+" 👋";
+  }
+
+  // Run repeatedly because the prototype changes views dynamically.
+  window.addEventListener("load",updateIdentity);
+  document.addEventListener("click",()=>setTimeout(updateIdentity,30));
+  window.addEventListener("storage",updateIdentity);
+  setInterval(updateIdentity,500);
+
+  window.campusBiteRefreshIdentity=updateIdentity;
+})();
+</script>
+
+<script id="header-avatar-dynamic-js">
+(function(){
+  function updateHeaderAvatar(){
+    const u=window.campusBiteUser&&window.campusBiteUser();
+    const avatar=document.getElementById("headerAvatar");
+    if(!avatar || !u) return;
+    if(u.role==="staff"){
+      const initials=(u.name||"Staff").trim().split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase();
+      avatar.textContent=initials||"ST";
+    }else{
+      const initials=(u.name||"Customer").trim().split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase();
+      avatar.textContent=initials||"ST";
+    }
+  }
+  window.addEventListener("load",()=>setTimeout(updateHeaderAvatar,100));
+  setInterval(updateHeaderAvatar,500);
+})();
+</script>
+
+<script id="remove-hgf-hardcode-js">
+(function(){
+  function initials(name){
+    return (name || "Customer").trim().split(/\s+/).filter(Boolean)
+      .slice(0,2).map(x=>x[0]).join("").toUpperCase() || "ST";
+  }
+  function update(){
+    const u=window.campusBiteUser&&window.campusBiteUser();
+    if(!u) return;
+    const wanted=initials(u.name);
+    document.querySelectorAll("*").forEach(el=>{
+      if(el.children.length===0 && (el.textContent||"").trim()==="HGF"){
+        el.textContent=wanted;
+      }
+    });
+    const explicit=document.getElementById("dynamicCustomerBadge");
+    if(explicit) explicit.textContent=wanted;
+  }
+  window.addEventListener("load",()=>setTimeout(update,100));
+  setInterval(update,400);
+})();
+</script>
+
+
+
+
+
+
+
+
+
+<script id="shift-cart-wallet-right-js">
+(function(){
+  function shift(){
+    const group=document.getElementById("headerRightGroup");
+    if(!group) return;
+    const header=group.closest("header");
+    if(!header) return;
+
+    const candidates=[...header.querySelectorAll("button,span,div,a")];
+    const cart=candidates.find(x=>/^(🛒|cart)/i.test((x.textContent||"").trim()) || /cart/i.test((x.getAttribute("aria-label")||"")));
+    const wallet=candidates.find(x=>/₹\s*[\d,]+/.test(x.textContent||"") || /wallet/i.test((x.getAttribute("aria-label")||"")));
+
+    [cart,wallet].filter(Boolean).forEach(el=>{
+      if(el!==group && !group.contains(el)) group.insertBefore(el,group.firstChild);
+    });
+  }
+  window.addEventListener("load",()=>setTimeout(shift,100));
+  new MutationObserver(()=>setTimeout(shift,0)).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+
+<script id="customer-hide-staff-nav">
+(function(){
+  function cleanCustomerNav(){
+    const role=window.campusBiteRole&&window.campusBiteRole();
+    if(role!=="customer") return;
+    document.querySelectorAll("nav, aside, header, .sidebar, .bottom-nav").forEach(root=>{
+      root.querySelectorAll("button,a,[role='button']").forEach(el=>{
+        const t=(el.textContent||"").trim().toLowerCase();
+        if(t.includes("staff console") || t.includes("staff access")){
+          el.remove();
+        }
+      });
+    });
+  }
+  window.addEventListener("load",()=>setTimeout(cleanCustomerNav,100));
+  new MutationObserver(()=>setTimeout(cleanCustomerNav,0)).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+
+<script id="staff-hide-customer-nav">
+(function(){
+  function cleanStaffNav(){
+    const role=window.campusBiteRole&&window.campusBiteRole();
+    if(role!=="staff") return;
+    document.querySelectorAll("nav, aside, header, .sidebar, .bottom-nav").forEach(root=>{
+      root.querySelectorAll("button,a,[role='button']").forEach(el=>{
+        const t=(el.textContent||"").trim().toLowerCase();
+        if(t.includes("customer access") || t.includes("customer app") || t==="customer" || t.includes("back to customer")){
+          el.remove();
+        }
+      });
+    });
+  }
+  window.addEventListener("load",()=>setTimeout(cleanStaffNav,100));
+  new MutationObserver(()=>setTimeout(cleanStaffNav,0)).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+
+<script id="strict-role-shell">
+(function(){
+  function sync(){
+    const role=window.campusBiteRole&&window.campusBiteRole();
+    document.body.classList.toggle("staff-mode",role==="staff");
+    document.body.classList.toggle("customer-mode",role==="customer");
+
+    if(role==="staff"){
+      const active=document.querySelector(".view.active");
+      if(!active || active.id!=="staff"){
+        const staff=document.getElementById("staff");
+        document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+        if(staff) staff.classList.add("active");
+      }
+    }
+  }
+  window.addEventListener("load",()=>setTimeout(sync,80));
+  setInterval(sync,300);
+})();
+</script>
+
+<script id="block4-counter-behavior">
+(function(){
+  // Shop selection is handled by #stable-shop-switch.
+})();
+</script>
+<script id="stable-shop-switch">
+(function(){
+  const map=SHOP_MAP;
+
+  function normalizeShop(shop){
+    return Object.values(map).includes(shop) ? shop : "Reo Store";
+  }
+
+  function syncShopUI(){
+    const shop=normalizeShop(selectedShop);
+    selectedShop=shop;
+
+    const select=document.getElementById("pickupCounter");
+    if(select){
+      const value=Object.keys(map).find(k=>map[k]===shop);
+      if(value) select.value=value;
+    }
+
+    const label=document.getElementById("selectedShopMenu");
+    if(label) label.textContent=shop;
+
+    document.querySelectorAll("[data-shop]").forEach(btn=>{
+      btn.classList.toggle("active", btn.dataset.shop===shop);
+    });
+  }
+
+  window.setCampusShop=function(shop){
+    selectedShop=normalizeShop(shop);
+    category="All";
+    localStorage.setItem("campusBiteSelectedShop",selectedShop);
+    syncShopUI();
+
+    // A cart belongs to one shop. Clear it when the customer changes shops
+    // so items from two different shops can never be submitted together.
+    if(typeof cart === "object" && cart !== null && Object.keys(cart).length){
+      cart={};
+      if(typeof renderCart === "function") renderCart();
+      if(typeof renderCheckout === "function") renderCheckout();
+    }
+
+    // Re-render ONLY from the selected shop's records.
+    renderHome();
+    renderMenu();
+
+    if(typeof toast==="function") toast(selectedShop+" menu selected");
+  };
+
+  window.setCampusShopByCounter=function(counterValue){
+    window.setCampusShop(map[String(counterValue)] || "Reo Store");
+  };
+
+  function bind(){
+    const select=document.getElementById("pickupCounter");
+    if(!select) return;
+
+    const saved=localStorage.getItem("campusBiteSelectedShop");
+    selectedShop=normalizeShop(saved || selectedShop || "Reo Store");
+    syncShopUI();
+
+    if(select.dataset.shopBound!=="1"){
+      select.dataset.shopBound="1";
+      select.addEventListener("change",function(){
+        window.setCampusShopByCounter(this.value);
+      });
+    }
+
+    renderHome();
+    renderMenu();
+  }
+
+  window.addEventListener("load",()=>setTimeout(bind,100));
+})();
+</script>
+
+
+
+<script id="campusbite-production-bridge">
+(function(){
+  const TOKEN_KEY="campusBiteApiToken";
+  const CUSTOMER_TOKEN_KEY="campusBiteCustomerToken";
+  const STAFF_TOKEN_KEY="campusBiteStaffToken";
+  const API="";
+  const ACTIVE_TOKEN_KEY="campusBiteActiveToken";
+  // Authentication is tab-scoped AND role-scoped. A single generic token key is
+  // unsafe for CampusBite's demo because switching customer/staff sessions can
+  // replace the token used by a customer action and produce a misleading 403.
+  // Customer and staff JWTs therefore live in separate sessionStorage slots.
+  try{localStorage.removeItem(TOKEN_KEY);localStorage.removeItem("campusBiteRoleSession");}catch(e){}
+  let pollTimer=null;
+  let menuRealtimeSource=null;
+  let menuRealtimeFallbackTimer=null;
+  let syncing=false;
+  let splitActionBusy=false;
+  function savedSession(){try{return JSON.parse(sessionStorage.getItem("campusBiteRoleSession")||"null")}catch(e){return null}}
+  function currentRole(){return String(savedSession()?.role||"").toLowerCase()}
+  function tokenForRole(role){
+    const active=sessionStorage.getItem(ACTIVE_TOKEN_KEY)||"";
+    const activePayload=decodeToken(active);
+    if(activePayload?.role===role) return active;
+    return sessionStorage.getItem(role==="customer"?CUSTOMER_TOKEN_KEY:role==="staff"?STAFF_TOKEN_KEY:TOKEN_KEY)||"";
+  }
+  function tokenWithClaim(role){
+    const preferred=tokenForRole(role);
+    const preferredPayload=decodeToken(preferred);
+    // A protected customer action must never borrow a credential from another
+    // role. If the active customer token is malformed/mismatched, fail closed
+    // instead of sending a stale staff/legacy token and receiving a 403.
+    return preferredPayload?.role===role ? preferred : "";
+  }
+  function token(path){
+    const p=String(path||"");
+    if(p.startsWith("/api/customer/")) return tokenWithClaim("customer");
+    if(p.startsWith("/api/staff/")) return tokenWithClaim("staff");
+    return tokenWithClaim(currentRole());
+  }
+  function decodeToken(raw){try{const parts=String(raw||"").split('.');if(parts.length!==3)return null;let body=parts[1].replace(/-/g,'+').replace(/_/g,'/');while(body.length%4)body+='=';return JSON.parse(atob(body));}catch(e){return null}}
+  function tokenRole(path){const p=decodeToken(token(path));return p?.role?String(p.role):null}
+  function tokenIdentity(role){const p=decodeToken(tokenForRole(role||currentRole()));return p&&p.role&&p.id?{role:String(p.role),id:Number(p.id),customerCode:p.customerCode||null,shop:p.shop||null}:null}
+  function user(){try{const saved=savedSession();const role=String(saved?.role||"").toLowerCase();const ti=tokenIdentity(role);if(!ti)return saved;if(String(ti.role)!==role||(saved.id!=null&&Number(saved.id)!==ti.id)){const repaired=Object.assign({},saved||{},ti);sessionStorage.setItem("campusBiteRoleSession",JSON.stringify(repaired));return repaired}return saved}catch(e){return null}}
+  function resetMismatchedSession(){
+    const saved=savedSession();
+    if(!saved||!saved.role)return false;
+    const role=String(saved.role).toLowerCase();
+    const ti=tokenIdentity(role);
+    if(ti&&String(ti.role)!==role){
+      sessionStorage.removeItem(role==="customer"?CUSTOMER_TOKEN_KEY:role==="staff"?STAFF_TOKEN_KEY:TOKEN_KEY);
+      sessionStorage.removeItem("campusBiteRoleSession");
+      document.body.classList.remove("staff-mode","customer-mode");
+      if(typeof window.campusBiteSetRoleSession==="function")window.campusBiteSetRoleSession(null);
+      if(typeof window.campusBiteShowGate==="function")window.campusBiteShowGate();
+      return true;
+    }
+    return false;
+  }
+  async function api(path,opts={}){
+    resetMismatchedSession();
+    const headers=Object.assign({"Content-Type":"application/json"},opts.headers||{});
+    const authToken=token(path);
+    if(authToken) headers.Authorization="Bearer "+authToken;
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),15000);
+    try{
+      const fetchOpts=Object.assign({},opts,{headers,signal:controller.signal});
+      const r=await fetch(API+path,fetchOpts);
+      let data={}; try{data=await r.json()}catch(e){}
+      if(!r.ok){
+        if(r.status===403 && String(path).startsWith('/api/customer/') && currentRole()==='customer' && tokenRole(path)!=='customer'){
+          resetMismatchedSession();
+          throw new Error('Your customer session was out of sync. Please sign in again.');
+        }
+        throw new Error(data.error||("Request failed ("+r.status+")"));
+      }
+      return data;
+    }catch(e){
+      if(e?.name==='AbortError') throw new Error('The server took too long to respond. Please try checkout again.');
+      throw e;
+    }finally{clearTimeout(timeout)}
+  }
+  window.campusBiteApi=api;
+  document.addEventListener("click",async e=>{const b=e.target.closest("[data-rate-order]");if(!b)return;const id=b.dataset.rateOrder,rating=Number(b.dataset.rating);try{const data=await api('/api/customer/orders/'+encodeURIComponent(id)+'/rating',{method:'POST',body:JSON.stringify({rating})});ratings[id]=data.rating;renderOrders();toast('Thanks for rating your order!')}catch(err){toast(err.message||'Could not save rating')}});
+  async function respondToSplitRequest(id,action){
+    const u=user();if(!u||u.role!=="customer"||!token('/api/customer/split-bill/requests/'+encodeURIComponent(id)+'/respond'))throw new Error('Please sign in as the customer receiving this request.');
+    const current=splitRequests.find(r=>Number(r.id)===Number(id));
+    if(current&&current.direction!=='incoming')throw new Error('This payment request belongs to another customer.');
+    try{const d=await api('/api/customer/split-bill/requests/'+encodeURIComponent(id)+'/respond',{method:'POST',body:JSON.stringify({action})});if(action==='approve')toast('Split bill approved — wallet debited ₹'+Number(d.amount||0).toLocaleString('en-IN'));else toast('Split bill request rejected');await loadCustomerState(true);return d;}catch(e){if(/Forbidden|recipient|Unauthorized|session/i.test(String(e.message||'')))await loadCustomerState(true).catch(()=>{});throw e;}
+  }
+  document.addEventListener("click",async e=>{
+    const b=e.target.closest("[data-split-action]");
+    if(!b)return;
+    const id=b.dataset.splitId,action=b.dataset.splitAction;
+    if(!id||!action||b.disabled)return;
+    const card=b.closest(".splitRequest");
+    const buttons=card?card.querySelectorAll("button[data-split-action]"):[];
+    buttons.forEach(x=>x.disabled=true);
+    splitActionBusy=true;
+    try{await respondToSplitRequest(id,action);}
+    catch(err){toast(err?.message||'Could not process split bill request');}
+    finally{splitActionBusy=false;buttons.forEach(x=>x.disabled=false);}
+  });
+  function setSession(session,jwtToken){
+    const role=String(session?.role||'').toLowerCase();
+    if(jwtToken){
+      sessionStorage.setItem(ACTIVE_TOKEN_KEY,jwtToken);
+      sessionStorage.setItem(role==='customer'?CUSTOMER_TOKEN_KEY:role==='staff'?STAFF_TOKEN_KEY:TOKEN_KEY,jwtToken);
+    }
+    // Only one role is active in a tab. Remove the other role's token so a stale
+    // credential can never be selected for a protected action.
+    sessionStorage.removeItem(role==='customer'?STAFF_TOKEN_KEY:CUSTOMER_TOKEN_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.setItem("campusBiteRoleSession",JSON.stringify(session));
+    if(typeof window.campusBiteSetRoleSession==="function") window.campusBiteSetRoleSession(session);
+    if(typeof window.campusBiteHideGate==="function") window.campusBiteHideGate();
+    document.body.classList.toggle("staff-mode",session.role==="staff");
+    document.body.classList.toggle("customer-mode",session.role==="customer");
+  }
+  function clearSession(){wallet=0;orders=[];transactions=[];splitRequests=[];ratings={};sessionStorage.removeItem(TOKEN_KEY);sessionStorage.removeItem(ACTIVE_TOKEN_KEY);sessionStorage.removeItem(CUSTOMER_TOKEN_KEY);sessionStorage.removeItem(STAFF_TOKEN_KEY);sessionStorage.removeItem("campusBiteRoleSession");if(typeof window.campusBiteSetRoleSession==="function")window.campusBiteSetRoleSession(null);document.body.classList.remove("staff-mode","customer-mode");if(typeof window.campusBiteShowGate==="function")window.campusBiteShowGate();}
+  function mapOrder(o){return {id:o.id,items:o.items||[],total:Number(o.total||0),status:Number(o.status||0),discount:Number(o.discount||0),slot:o.slot||"ASAP",shop:o.shop||"Reo Store",createdAt:o.createdAt,prepStartedAt:o.prepStartedAt||null,readyAt:o.readyAt||null,completedAt:o.completedAt||null,customerName:o.customerName||null,customerCode:o.customerCode||null}}
+  // Staff queue priority: pickup times that are due now/overdue come first, then the nearest upcoming pickup.
+  // ASAP orders are treated as due now. Invalid/missing slots fall back to their creation time.
+  function indiaClockMinutes(){
+    const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
+    const h=Number(parts.find(p=>p.type==='hour')?.value||0);
+    const m=Number(parts.find(p=>p.type==='minute')?.value||0);
+    return h*60+m;
+  }
+  function pickupPriority(order){
+    const raw=String(order?.slot||'ASAP').trim();
+    const slot=raw.toUpperCase();
+    const created=Number(order?.createdAt||0);
+    if(slot==='ASAP') return [0,0,created];
+    const m=raw.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+    if(!m) return [2,Number.MAX_SAFE_INTEGER,created];
+    let h=Number(m[1]), min=Number(m[2]);
+    if(h<1||h>12||min<0||min>59) return [2,Number.MAX_SAFE_INTEGER,created];
+    if(h===12) h=0;
+    if(m[3].toUpperCase()==='PM') h+=12;
+    const pickupMinutes=h*60+min;
+    const nowMinutes=indiaClockMinutes();
+    const diff=pickupMinutes-nowMinutes;
+    // Due/overdue orders first. Among due orders, the latest due time is first.
+    if(diff<=0) return [0,-pickupMinutes,created];
+    // Upcoming orders next. The nearest pickup time is first.
+    return [1,pickupMinutes,created];
+  }
+  function sortStaffOrdersByPickup(list){
+    return list.slice().sort((a,b)=>{const pa=pickupPriority(a),pb=pickupPriority(b);for(let i=0;i<pa.length;i++){if(pa[i]!==pb[i])return pa[i]-pb[i];}return 0;});
+  }
+  function hydrateState(st){
+    wallet=Number(st.wallet||0); orders=(st.orders||[]).map(mapOrder); transactions=st.transactions||[]; splitRequests=st.splitRequests||[]; ratings=Object.fromEntries((st.ratings||[]).map(r=>[String(r.orderId),r])); window.campusBiteAutoPay=st.autopay||{enabled:false,threshold:200,amount:500};
+    const ap=window.campusBiteAutoPay;
+    const status=$('autoPayStatus'), text=$('autoPayText'), btn=$('autoPayBtn');
+    if(status)status.textContent=ap.enabled?'ON':'OFF';
+    if(text)text.textContent=ap.enabled?('Auto-refill ₹'+Number(ap.amount||500).toLocaleString('en-IN')+' at ₹'+Number(ap.threshold||200).toLocaleString('en-IN')+' threshold'):'disabled';
+    if(btn)btn.textContent=ap.enabled?'Disable auto-pay':'Enable auto-pay';
+    if(typeof render==='function')render();
+    if(typeof renderOrders==='function')renderOrders();
+    if(typeof renderWallet==='function')renderWallet();
+  }
+  async function loadCustomerState(silent=false){
+    if(!token('/api/customer/state')||user()?.role!=="customer"||syncing||splitActionBusy)return;
+    syncing=true;
+    try{const st=await api('/api/customer/state');hydrateState(st);}
+    catch(e){if(!silent)toast(e.message||"Could not load account data");}
+    finally{syncing=false;}
+  }
+  function applyServerMenuItem(x){
+    if(!x||x.id==null)return false;
+    const item=MENU.find(m=>Number(m.id)===Number(x.id));
+    if(!item)return false;
+    let changed=false;
+    if(x.available!=null){const v=!!x.available;if(item.available!==v){item.available=v;changed=true;}}
+    if(x.price!=null){const v=Number(x.price);if(item.price!==v){item.price=v;changed=true;}}
+    if(x.stock!=null){const v=Number(x.stock);if(item.stock!==v){item.stock=v;changed=true;}}
+    return changed;
+  }
+  function renderLiveMenu(){
+    // Rendering is deliberately independent of the current button/click state.
+    // A server menu mutation must be visible as soon as its event arrives.
+    try{if(typeof renderHome==='function')renderHome();}catch(e){}
+    try{if(typeof renderMenu==='function')renderMenu();}catch(e){}
+    try{if(typeof renderCart==='function')renderCart();}catch(e){}
+  }
+  function startMenuRealtime(){
+    if(menuRealtimeSource)return;
+    if(!('EventSource' in window)){
+      clearInterval(menuRealtimeFallbackTimer);
+      menuRealtimeFallbackTimer=setInterval(()=>loadMenu(),3000);
+      return;
+    }
+    try{
+      menuRealtimeSource=new EventSource('/api/menu/events');
+      menuRealtimeSource.onopen=()=>{loadMenu().catch(()=>{});};
+      menuRealtimeSource.onmessage=e=>{
+        try{
+          const changed=applyServerMenuItem(JSON.parse(e.data));
+          if(changed){
+            const u=user();
+            if(u?.role==='customer')renderLiveMenu();
+            if(u?.role==='staff' && typeof renderStaffMenuOnly==='function' && staffMenuToggleInFlight.size===0)renderStaffMenuOnly();
+          }
+        }catch(err){}
+      };
+      menuRealtimeSource.onerror=()=>{
+        // EventSource automatically reconnects. Keep a low-frequency fallback
+        // only while disconnected so a proxy/server restart cannot leave stale UI.
+        clearInterval(menuRealtimeFallbackTimer);
+        menuRealtimeFallbackTimer=setInterval(()=>loadMenu(),5000);
+      };
+    }catch(e){
+      menuRealtimeSource=null;
+      clearInterval(menuRealtimeFallbackTimer);
+      menuRealtimeFallbackTimer=setInterval(()=>loadMenu(),3000);
+    }
+  }
+  async function loadMenu(){
+    try{const data=await api('/api/menu');let changed=false;(data.items||[]).forEach(x=>{changed=applyServerMenuItem(x)||changed;});if(changed){renderLiveMenu();}else{if(typeof renderHome==='function')renderHome();if(typeof renderMenu==='function')renderMenu();}}
+    catch(e){}
+  }
+  function indiaToday(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
+  let customerAuthMode='login';
+  function setCustomerAuthMode(mode){
+    customerAuthMode=mode==='register'?'register':'login';
+    const isRegister=customerAuthMode==='register';
+    const loginPage=$('customerLoginPage'),registerPage=$('customerRegisterPage'),loginErr=$('customerError'),registerErr=$('customerRegisterError');
+    if(loginPage)loginPage.style.display=isRegister?'none':'';
+    if(registerPage)registerPage.style.display=isRegister?'':'none';
+    if(loginErr)loginErr.style.display='none';
+    if(registerErr)registerErr.style.display='none';
+  }
+  function openCustomerLoginPage(){setCustomerAuthMode('login');}
+  function openCustomerRegisterPage(){
+    setCustomerAuthMode('register');
+    $('customerName').value='';$('customerRegisterCodeInput').value='';$('customerRegisterPassword').value='';$('customerPasswordConfirm').value='';
+  }
+  async function customerLogin(){
+    sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(ACTIVE_TOKEN_KEY);
+    sessionStorage.removeItem(CUSTOMER_TOKEN_KEY);
+    sessionStorage.removeItem(STAFF_TOKEN_KEY);
+    sessionStorage.removeItem("campusBiteRoleSession");
+    const reg=$('customerCodeInput').value.trim(),pw=$('customerPassword').value,err=$('customerError');
+    try{const d=await api('/api/auth/customer',{method:'POST',body:JSON.stringify({customerCode:reg,password:pw})});setSession(d.user,d.token);await loadCustomerState();await loadMenu();view('home');toast('Welcome back, '+d.user.name.split(/\s+/)[0]+' 👋');startPolling();}
+    catch(e){if(err){err.textContent=e.message||'Invalid CampusBite ID or password.';err.style.display='block';}else toast(e.message||'Login failed');}
+  }
+  async function customerRegister(){
+    const name=$('customerName').value.trim(),reg=$('customerRegisterCodeInput').value.trim(),pw=$('customerRegisterPassword').value,pw2=$('customerPasswordConfirm').value,err=$('customerRegisterError');
+    if(pw!==pw2){err.textContent='Passwords do not match.';err.style.display='block';return;}
+    try{
+      await api('/api/auth/customer/register',{method:'POST',body:JSON.stringify({name,customerCode:reg,password:pw})});
+      $('customerCodeInput').value=reg;
+      $('customerPassword').value='';
+      $('customerName').value='';$('customerRegisterCodeInput').value='';$('customerRegisterPassword').value='';$('customerPasswordConfirm').value='';
+      setCustomerAuthMode('login');
+      const loginErr=$('customerError');
+      loginErr.textContent='Account created successfully. Please log in with your CampusBite ID and password.';
+      loginErr.style.display='block';
+    }catch(e){if(err){err.textContent=e.message||'Could not create your account.';err.style.display='block';}else toast(e.message||'Account creation failed');}
+  }
+  async function staffLogin(){
+    sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(STAFF_TOKEN_KEY);
+    sessionStorage.removeItem(CUSTOMER_TOKEN_KEY);
+    sessionStorage.removeItem("campusBiteRoleSession");
+    const staffCode=$('staffCode').value.trim(),pin=$('staffPin').value,err=$('staffError');
+    try{const d=await api('/api/auth/staff',{method:'POST',body:JSON.stringify({staffCode,pin})});setSession(d.user,d.token);view('staff');await loadStaff();startPolling();toast(d.user.shop+' staff console ready');}
+    catch(e){if(err){err.textContent=e.message||'Invalid staff PIN.';err.style.display='block';}else toast(e.message||'Staff login failed');}
+  }
+  function updateSplitBillPreview(){
+    const t=totals(); const on=$('splitBillToggle')?.checked; const amount=Number($('splitAmount')?.value||0);
+    const result=$('splitBillResult'); if(!result)return;
+    if(!on){result.textContent='';return;}
+    if(amount<=0){result.textContent=`You pay ₹${t.total.toLocaleString('en-IN')} from your wallet.`;return;}
+    if(amount>t.total){result.textContent=`Split amount cannot exceed ₹${t.total.toLocaleString('en-IN')}.`;result.style.color='var(--red)';return;}
+    const own=t.total-amount;result.style.color='var(--green)';result.textContent=`Other wallet pays ₹${amount.toLocaleString('en-IN')} • You pay ₹${own.toLocaleString('en-IN')}`;
+  }
+  window.campusBiteUpdateSplitBillPreview=updateSplitBillPreview;
+  async function placeOrder(){
+    if(checkoutBusy)return;
+    const t=totals(); if(!t.n){toast('Your cart is empty');return;}
+    const splitEnabled=$("splitBillToggle")?.checked;
+    const splitWalletId=String($("splitWalletId")?.value||'').trim();
+    const splitAmount=splitEnabled?Number($("splitAmount")?.value||0):0;
+    if(splitEnabled && (!splitWalletId || !Number.isFinite(splitAmount) || splitAmount<=0)){toast('Enter the other Customer / Wallet ID and a valid amount');return;}
+    if(splitEnabled && splitAmount>=t.total){toast('The other wallet must pay less than the full order total');return;}
+    if(!splitEnabled && wallet<t.total){toast('Insufficient wallet balance — use Split bill or add money');return;}
+    const items=Object.entries(cart).map(([id,q])=>{const x=MENU.find(m=>m.id==id);return{id:x.id,name:x.name,q,emoji:x.emoji};});
+    const cf=$("confirm");
+    checkoutBusy=true;
+    if(cf){cf.disabled=true;cf.textContent=splitEnabled?'Sending request…':'Placing order…';}
+    try{
+      const body={items,total:t.total,discount:t.discount,slot:$("slot").value,shop:selectedShop,checkoutRequestId};
+      if(splitEnabled){body.splitWalletId=splitWalletId;body.splitAmount=splitAmount;}
+      const d=await api('/api/customer/order',{method:'POST',body:JSON.stringify(body)});
+      if(d.pending){
+        checkoutRequestId="";
+        cart={};$("checkoutModal").classList.remove('open');render();view('wallet');toast('Payment request sent — waiting for approval');
+        loadCustomerState(true).catch(()=>{});
+        return;
+      }
+      wallet=Number(d.wallet);orders=[mapOrder(d.order),...orders.filter(x=>x.id!==d.order.id)];checkoutRequestId="";cart={};
+      $("checkoutModal").classList.remove('open');
+      render();
+      view('tracking');
+      toast('Order confirmed — sent to '+selectedShop);
+      // Refresh in the background so the UI never waits on the state dashboard.
+      loadCustomerState(true).catch(()=>{});
+    }catch(e){
+      toast(e.message||'Could not place order');
+    }finally{
+      checkoutBusy=false;
+      if(cf){cf.disabled=false;cf.innerHTML=splitEnabled?'Send Payment Request&nbsp; →':'Place Order&nbsp; →';}
+    }
+  }
+  async function topup(){const amount=+$('moneyAmount').value;if(!amount)return;try{const d=await api('/api/customer/wallet/topup',{method:'POST',body:JSON.stringify({amount})});wallet=Number(d.wallet);$('moneyModal').classList.remove('open');await loadCustomerState(true);toast('₹'+amount.toLocaleString('en-IN')+' added to Campus Wallet');}catch(e){toast(e.message||'Top-up failed');}}
+  async function saveAutopay(){
+    const current=window.campusBiteAutoPay||{enabled:false,threshold:200,amount:500};
+    const next={enabled:!current.enabled,threshold:Number(current.threshold)||200,amount:Number(current.amount)||500};
+    try{const d=await api('/api/customer/autopay',{method:'POST',body:JSON.stringify(next)});window.campusBiteAutoPay=d.autopay||next;if(d.wallet!=null)wallet=Number(d.wallet);await loadCustomerState(true);toast(d.autopay?.enabled?'Auto-pay enabled':'Auto-pay disabled');}
+    catch(e){toast(e.message||'Auto-pay update failed');}
+  }
+  function broadcastAvailabilityChange(item){
+    // Keep availability changes synchronized across open CampusBite tabs.
+    // The server remains the source of truth; this is only a fast UI signal.
+    const payload={type:"menu-availability-changed",id:Number(item.id),available:!!item.available,updatedAt:Date.now()};
+    try{localStorage.setItem("campusBiteMenuAvailabilityChange",JSON.stringify(payload));}catch(e){}
+    try{
+      if("BroadcastChannel" in window){
+        if(!window.campusBiteMenuChannel)window.campusBiteMenuChannel=new BroadcastChannel("campusBite-menu-availability");
+        window.campusBiteMenuChannel.postMessage(payload);
+      }
+    }catch(e){}
+  }
+  let staffLoadInFlight=null;
+  const staffMenuToggleInFlight=new Set();
+  let staffLoadQueued=false;
+
+  let staffMenuLoadInFlight=null;
+  let staffMenuLoadQueued=false;
+  // Per-item revisions close the last subtle race: a GET that started before a
+  // toggle can finish after the PATCH and otherwise overwrite the confirmed
+  // state with its older snapshot.
+  const staffMenuItemRevision=new Map();
+  async function loadStaffMenu(){
+    if(!token('/api/staff/orders')||user()?.role!=="staff")return;
+    bindStaffMenuControls();
+    if(staffMenuLoadInFlight){staffMenuLoadQueued=true;return staffMenuLoadInFlight;}
+    staffMenuLoadInFlight=(async()=>{
+      try{
+        // Capture the revision of every item at the instant this GET begins.
+        // If an item is toggled while this request is in flight, its revision
+        // changes and this older response is forbidden from overwriting the
+        // newer PATCH result.
+        const requestRevisions=new Map(MENU.map(m=>[Number(m.id),Number(staffMenuItemRevision.get(Number(m.id))||0)]));
+        const md=await api('/api/menu');
+        const byId=new Map((md.items||[]).map(x=>[Number(x.id),x]));
+        MENU.forEach(m=>{
+          const id=Number(m.id),fresh=byId.get(id);
+          if(fresh){
+            const revisionStillCurrent=Number(staffMenuItemRevision.get(id)||0)===Number(requestRevisions.get(id)||0);
+            // A currently committed toggle OR any newer toggle that began after
+            // this GET started makes this response stale for availability.
+            if(revisionStillCurrent&&!staffMenuToggleInFlight.has(id))m.available=!!fresh.available;
+            if(fresh.price!=null)m.price=Number(fresh.price);
+            if(fresh.stock!=null)m.stock=Number(fresh.stock);
+          }
+        });
+        // Never replace the live button while an availability commit is in flight.
+        // The menu fetch may finish during the click; rendering waits until the
+        // commit's finally block performs the authoritative reconciliation.
+        if(staffMenuToggleInFlight.size===0 && typeof renderStaffMenuOnly==='function')renderStaffMenuOnly();
+      }catch(e){/* retain last known staff menu state on transient failures */}
+    })();
+    try{return await staffMenuLoadInFlight;}finally{
+      staffMenuLoadInFlight=null;
+      if(staffMenuLoadQueued){staffMenuLoadQueued=false;void loadStaffMenu();}
+    }
+  }
+  function renderStaffMenuOnly(){
+    const shop=user()?.shop;
+    const root=$('menuControl');
+    if(!root||!shop)return;
+    const shopMenu=MENU.filter(x=>x.shop===shop);
+    root.innerHTML=shopMenu.map(x=>`<div class="row staff-menu-row"><span>${x.emoji} ${x.name}</span><button type="button" class="availability-toggle ${x.available?'is-available':'is-unavailable'}" data-server-menu="${x.id}" ${staffMenuToggleInFlight.has(Number(x.id))?'disabled':''}>${x.available?'Available ✓':'Not available'}</button></div>`).join('');
+  }
+
+  async function toggleStaffMenuAvailability(id){
+    id=Number(id);
+    if(!Number.isInteger(id)||staffMenuToggleInFlight.has(id))return;
+    const item=MENU.find(x=>Number(x.id)===id);
+    const shop=user()?.shop;
+    if(!item||user()?.role!=="staff"||item.shop!==shop)return;
+    const previous=!!item.available;
+    const next=!previous;
+    staffMenuItemRevision.set(id,Number(staffMenuItemRevision.get(id)||0)+1);
+    staffMenuToggleInFlight.add(id);
+    // Optimistic local update makes the staff console acknowledge the single click
+    // immediately, while the server remains the source of truth.
+    item.available=next;
+    renderStaffMenuOnly();
+    try{
+      const d=await api('/api/staff/menu/'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({available:next})});
+      const serverItem=d?.item;
+      if(!serverItem)throw new Error('The server did not confirm the menu update');
+      item.available=!!serverItem.available;
+      broadcastAvailabilityChange(item);
+      toast(item.available?'Available ✓':'Not available');
+    }catch(e){
+      item.available=previous;
+      toast(e.message||'Availability update failed');
+      try{await loadStaffMenu();}catch{}
+    }finally{
+      staffMenuToggleInFlight.delete(id);
+      renderStaffMenuOnly();
+    }
+  }
+
+  function bindStaffMenuControls(){
+    const root=$('menuControl');
+    if(!root||root.dataset.menuToggleBound==='1')return;
+    root.dataset.menuToggleBound='1';
+    // Event delegation survives every menu render, so replacing innerHTML can
+    // never silently remove the click handler.
+    root.addEventListener('click',e=>{
+      const button=e.target.closest('[data-server-menu]');
+      if(!button||!root.contains(button))return;
+      e.preventDefault();
+      void toggleStaffMenuAvailability(button.dataset.serverMenu);
+    });
+  }
+
+  async function loadStaff(){
+    if(!token('/api/staff/orders')||user()?.role!=="staff")return;
+    // Never allow the 2-second background poll to overlap a staff refresh.
+    // Overlapping refreshes used to rebuild #menuControl while an availability
+    // PATCH was still in flight, replacing the button and making one click look
+    // like it had not registered.
+    if(staffLoadInFlight){staffLoadQueued=true;return staffLoadInFlight;}
+    staffLoadInFlight=(async()=>{
+    try{
+      const shop=user().shop;
+      // Keep the live order queue independent from optional dashboard metrics.
+      // A rating/summary failure must never hide staff orders.
+      const od=await api('/api/staff/orders');
+      const [sm,sr]=await Promise.all([
+        api('/api/staff/summary?date='+encodeURIComponent(indiaToday())).catch(()=>({orders:0,revenue:0})),
+        api('/api/staff/rating').catch(()=>({average:null,count:0}))
+      ]);
+      const all=(od.orders||[]).map(mapOrder); orders=all;
+      const todayOrders=all.filter(o=>o.createdAt&&new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(o.createdAt))===indiaToday());
+      const active=sortStaffOrdersByPickup(all.filter(o=>o.status<3));
+      const revenue=Number(sm.revenue||0);
+      const prepVals=todayOrders.filter(o=>o.readyAt&&o.createdAt).map(o=>(o.readyAt-o.createdAt)/60000);const prep=prepVals.length?prepVals.reduce((a,b)=>a+b,0)/prepVals.length:(SHOP_PREP_BASE[shop]||5);
+      $('sOrders').textContent=Number(sm.orders||0);$('sRevenue').textContent='₹'+revenue.toLocaleString('en-IN');$('sQueue').textContent=active.length;const pe=$('sPrepTime');if(pe)pe.textContent=prep.toFixed(1)+' min';const title=$('staffShopTitle');if(title)title.textContent=shop;
+      const rating=sr&&sr.average!=null?Math.max(0,Math.min(5,Number(sr.average))):null;const ratingStars=$('staffRatingStars'),ratingNumber=$('staffRatingNumber');if(ratingStars){ratingStars.innerHTML=Array.from({length:5},(_,i)=>{const fill=Math.max(0,Math.min(1,(rating==null?0:rating)-i))*100;return `<span class="staff-rating-star" style="--fill:${fill}%">★</span>`}).join('');}if(ratingNumber)ratingNumber.textContent=rating==null?'— / 5':rating.toFixed(1)+' / 5';
+      $('queue').innerHTML=active.length?active.map(o=>`<div class="q"><div style="width:100%"><div style="display:flex;justify-content:space-between;gap:10px"><div><b>${o.id}</b><div class="muted">${o.customerName||'Customer'} • ${o.customerCode||''}</div><div class="muted">${o.items.map(i=>i.name+' × '+i.q).join(', ')}</div><div class="muted staff-pickup-time">🕐 Pickup: <b>${o.slot||'ASAP'}</b></div></div><span class="badge">${['Received','Preparing','Ready','Completed'][o.status]}</span></div><div class="statusSteps">${['Received','Preparing','Ready','Completed'].map((label,idx)=>`<button class="secondary statusStep ${idx===o.status?'current':''}" data-server-status="${o.id}" data-target-status="${idx}" ${idx!==o.status+1?'disabled':''}>${idx===o.status?'✓ ':''}${label}</button>`).join('')}</div></div></div>`).join(''):'<div class="empty">No active orders for '+shop+'.</div>';
+      document.querySelectorAll('[data-server-status]').forEach(b=>b.onclick=async()=>{const id=b.dataset.serverStatus,next=Number(b.dataset.targetStatus);try{await api('/api/staff/orders/'+encodeURIComponent(id)+'/status',{method:'PATCH',body:JSON.stringify({status:next})});await loadStaff();toast(['Received','Preparing','Ready','Completed'][next]);}catch(e){toast(e.message||'Status update failed');}});
+      // Menu control is synchronized by its own lifecycle. Never let the staff
+      // dashboard/order refresh rebuild this DOM while an availability PATCH is in flight.
+      await loadStaffMenu();
+      // Keep the existing Food Waste Helper visible. It is rendered separately
+      // from #menuControl so live menu synchronization cannot remove it.
+      if(typeof renderWasteIntelligence==='function')renderWasteIntelligence(shop);
+    }catch(e){toast(e.message||'Could not sync staff console');}
+    })();
+    try{return await staffLoadInFlight;}finally{
+      staffLoadInFlight=null;
+      if(staffLoadQueued){staffLoadQueued=false;void loadStaff();}
+    }
+  }
+  function startPolling(){clearInterval(pollTimer);pollTimer=setInterval(()=>{const u=user();if(!u)return;if(u.role==='customer'){const checkoutOpen=$('checkoutModal')?.classList.contains('open'),cartOpen=$('cart')?.classList.contains('active');if(!checkoutOpen&&!cartOpen&&!splitActionBusy){loadCustomerState(true);loadMenu();}}if(u.role==='staff')loadStaff();},2000);}
+  function wire(){
+    const sl=$('continueCustomer'),sf=$('continueStaff'),createAccount=$('customerCreateAccount'),createSubmit=$('createCustomerAccount'),backLogin=$('customerBackToLogin'),backRoles=$('customerBackToRoles');if(sl)sl.onclick=customerLogin;if(sf)sf.onclick=staffLogin;if(createAccount)createAccount.onclick=openCustomerRegisterPage;if(createSubmit)createSubmit.onclick=customerRegister;if(backLogin)backLogin.onclick=openCustomerLoginPage;if(backRoles)backRoles.onclick=()=>{setCustomerAuthMode('login');if(typeof window.campusBiteShowGate==='function')window.campusBiteShowGate();};setCustomerAuthMode('login');
+    const cf=$('confirm');if(cf)cf.onclick=placeOrder;const sb=$('splitBillToggle');if(sb)sb.onchange=()=>{$('splitBillFields').classList.toggle('open',sb.checked);const cf=$('confirm');if(cf)cf.innerHTML=sb.checked?'Send Payment Request&nbsp; →':'Place Order&nbsp; →';updateSplitBillPreview()};const sa=$('splitAmount');if(sa)sa.oninput=updateSplitBillPreview;const cm=$('confirmMoney');if(cm)cm.onclick=topup;
+    const ap=$('autoPayBtn');if(ap)ap.onclick=saveAutopay;
+    const lg=$('logoutBtn');if(lg)lg.onclick=clearSession;
+    resetMismatchedSession();
+    const saved=user();if(saved&&token(saved.role==='customer'?'/api/customer/state':saved.role==='staff'?'/api/staff/orders':'')){if(saved.role==='customer'){loadCustomerState();loadMenu();view('home');}else if(saved.role==='staff'){view('staff');loadStaff();}startPolling();}else if(typeof window.campusBiteShowGate==="function")window.campusBiteShowGate();
+  }
+  if(!window.campusBiteMenuAvailabilityListenersBound){
+    window.campusBiteMenuAvailabilityListenersBound=true;
+    const applyAvailabilitySignal=payload=>{
+      if(!payload||payload.type!=="menu-availability-changed")return;
+      const item=MENU.find(x=>Number(x.id)===Number(payload.id));
+      if(item){item.available=!!payload.available;renderLiveMenu();}
+    };
+    window.addEventListener("storage",e=>{if(e.key==="campusBiteMenuAvailabilityChange"){try{applyAvailabilitySignal(JSON.parse(e.newValue||"null"));}catch(err){}}});
+    try{
+      if("BroadcastChannel" in window){
+        window.campusBiteMenuChannel=new BroadcastChannel("campusBite-menu-availability");
+        window.campusBiteMenuChannel.onmessage=e=>applyAvailabilitySignal(e.data);
+      }
+    }catch(e){}
+  }
+  window.campusBiteApi.loadCustomerState=loadCustomerState;
+  window.campusBiteApi.loadStaff=loadStaff;
+  window.campusBiteApi.loadMenu=loadMenu;
+  window.campusBiteLogout=clearSession;
+  window.campusBiteCheckAutoPay=async()=>false;
+  window.addEventListener('load',()=>{
+    setTimeout(wire,250);
+    // Establish the menu event stream independently of authentication and UI clicks.
+    setTimeout(startMenuRealtime,350);
+  });
+})();
+</script>
+</body>
+</html>

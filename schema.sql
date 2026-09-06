@@ -1,0 +1,83 @@
+CREATE TABLE IF NOT EXISTS customers (
+  id BIGSERIAL PRIMARY KEY,
+  customer_code TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
+  year TEXT NOT NULL,
+  role TEXT,
+  password_hash TEXT NOT NULL,
+  wallet_balance NUMERIC(12,2) NOT NULL DEFAULT 1250,
+  cashback NUMERIC(12,2) NOT NULL DEFAULT 75,
+  autopay_enabled BOOLEAN NOT NULL DEFAULT FALSE,
+  autopay_threshold NUMERIC(12,2) NOT NULL DEFAULT 200,
+  autopay_amount NUMERIC(12,2) NOT NULL DEFAULT 500,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TABLE IF NOT EXISTS staff_users (
+  id BIGSERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  shop TEXT UNIQUE NOT NULL,
+  pin_hash TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TABLE IF NOT EXISTS orders (
+  id BIGSERIAL PRIMARY KEY,
+  public_id TEXT UNIQUE NOT NULL,
+  customer_id BIGINT NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+  shop TEXT NOT NULL,
+  items JSONB NOT NULL,
+  total NUMERIC(12,2) NOT NULL,
+  discount NUMERIC(12,2) NOT NULL DEFAULT 0,
+  slot TEXT NOT NULL,
+  status SMALLINT NOT NULL DEFAULT 0 CHECK (status BETWEEN 0 AND 3),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  prep_started_at TIMESTAMPTZ,
+  ready_at TIMESTAMPTZ,
+  completed_at TIMESTAMPTZ
+);
+CREATE TABLE IF NOT EXISTS wallet_transactions (
+  id BIGSERIAL PRIMARY KEY,
+  customer_id BIGINT NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+  icon TEXT NOT NULL,
+  title TEXT NOT NULL,
+  sub TEXT NOT NULL,
+  amount NUMERIC(12,2) NOT NULL,
+  type TEXT NOT NULL CHECK (type IN ('credit','debit')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS menu_items (
+  id INTEGER PRIMARY KEY,
+  shop TEXT NOT NULL,
+  name TEXT NOT NULL,
+  price NUMERIC(12,2) NOT NULL DEFAULT 0,
+  stock INTEGER NOT NULL DEFAULT 0,
+  available BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+
+CREATE TABLE IF NOT EXISTS order_ratings (
+  id BIGSERIAL PRIMARY KEY,
+  customer_id BIGINT NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+  order_id BIGINT NOT NULL UNIQUE REFERENCES orders(id) ON DELETE CASCADE,
+  rating SMALLINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  comment TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS split_bill_requests (
+  id BIGSERIAL PRIMARY KEY,
+  requester_id BIGINT NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+  contributor_id BIGINT NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
+  amount NUMERIC(12,2) NOT NULL CHECK (amount > 0),
+  total NUMERIC(12,2) NOT NULL CHECK (total > 0),
+  own_share NUMERIC(12,2) NOT NULL CHECK (own_share >= 0),
+  shop TEXT NOT NULL,
+  slot TEXT NOT NULL,
+  items JSONB NOT NULL,
+  discount NUMERIC(12,2) NOT NULL DEFAULT 0,
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','approved','rejected','cancelled')),
+  order_id BIGINT REFERENCES orders(id) ON DELETE SET NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  responded_at TIMESTAMPTZ
+);
